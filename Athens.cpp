@@ -82,6 +82,7 @@ int main()
 	g.p3();
 	g.p4();
 	g.DijkstraAlg(g,1);
+	printf("hehe,wangsc student\n");
 	getchar();
 	return 0;
 }

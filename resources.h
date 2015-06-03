@@ -86,7 +86,6 @@ public:
 			printf("%d ",*it2);
 	}
 
-	
 	void p3(){
 		list<CEdge*>::iterator it,iend;
 		iend=IncidentList.end();
