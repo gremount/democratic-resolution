@@ -22,13 +22,15 @@ CEdge::CEdge(CEdge & x){
 }
 
 CGraph::CGraph(list<CEdge*> listEdge){
+	list<CEdge*> IncidentList2;
+	IncidentList2=listEdge;//the initial edges
 	IncidentList=listEdge;
 	numVertex=N;
 	numEdge=listEdge.size()*2;
 	//add the back edge
 	list<CEdge*>::iterator it,iend;
-	iend=IncidentList.end();
-	for(it=IncidentList.begin();it!=iend;it++)
+	iend=IncidentList2.end();
+	for(it=IncidentList2.begin();it!=iend;it++)
 	{
 		CEdge* e=new CEdge((*it)->getHead(),(*it)->getTail(),1,10);
 		IncidentList.push_back(e);
@@ -39,6 +41,11 @@ int main()
 {
 	list<CEdge*> listEdge;
 	int i,j;
+	
+	/*Our experiments emulate a network with a single-rooted, three-level tree topology:
+	 *specifically, a 1-8-16 tree with 128 top-of-rack (ToR) switches.
+	 */
+
 	//the edge between the root and the first level of the tree
 	for(i=2;i<=9;i++)
 	{
@@ -65,12 +72,11 @@ int main()
 	}
 
 	CGraph g(listEdge);
-	g.p1();
-	g.p2();
-	g.p3();
+	//g.p1();
+	//g.p2();
+	//g.p3();
 	g.p4();
 	g.DijkstraAlg(g,1);
-	printf("hehe,wangsc student\n");
 	getchar();
 	return 0;
 }

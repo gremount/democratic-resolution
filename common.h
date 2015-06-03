@@ -10,5 +10,5 @@ using namespace std;
 #include <stdio.h>
 #include <algorithm>
 #define INF 10000
-#define N 10
+#define N 153
 #endif

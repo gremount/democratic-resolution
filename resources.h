@@ -147,9 +147,9 @@ public:
 
 	void DijkstraAlg(CGraph &g,int s){
 		int i,j;
-		for(i=1;i<=10;i++)
+		for(i=1;i<=N;i++)
 			V.insert(i);
-		for(i=1;i<=10;i++)
+		for(i=1;i<=N;i++)
 			{d[i]=INF;p[i]=-2;}
 		S.insert(s);
 		V.erase(s);
@@ -162,6 +162,6 @@ public:
 			V.erase(j);
 			Update(j);
 					}
-		printf("\n 1->8:%d\n",d[8]);
+		printf("\n 1->8:%d\n",d[153]);
 	}
 };
