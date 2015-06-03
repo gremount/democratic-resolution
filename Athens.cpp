@@ -25,7 +25,7 @@ CGraph::CGraph(list<CEdge*> listEdge){
 	IncidentList=listEdge;
 	numVertex=N;
 	numEdge=listEdge.size()*2;
-	//加入反向边
+	//add the back edge
 	list<CEdge*>::iterator it,iend;
 	iend=IncidentList.end();
 	for(it=IncidentList.begin();it!=iend;it++)
