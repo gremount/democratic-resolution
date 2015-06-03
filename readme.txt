@@ -1,3 +1,11 @@
 readme
 
-这里是一个测试github功能的实验
+Democratic Resolution of Resource Conflicts Between SDN Control Programs
+
+core: Athens
+
+control: FTM(Fault-Tolerance Module) CBM(Core-Bandwidth Module) GBM(Guaranteed-Bandwidth Module) SRM(Switch Resource Module)
+
+input: request injection module
+
+output: winning proposal
