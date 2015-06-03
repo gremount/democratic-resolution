@@ -24,58 +24,46 @@ CEdge::CEdge(CEdge & x){
 CGraph::CGraph(list<CEdge*> listEdge){
 	IncidentList=listEdge;
 	numVertex=N;
-	numEdge=listEdge.size();
+	numEdge=listEdge.size()*2;
+	//加入反向边
+	list<CEdge*>::iterator it,iend;
+	iend=IncidentList.end();
+	for(it=IncidentList.begin();it!=iend;it++)
+	{
+		CEdge* e=new CEdge((*it)->getHead(),(*it)->getTail(),1,10);
+		IncidentList.push_back(e);
+	}
 }
-
-
 
 int main()
 {
 	list<CEdge*> listEdge;
-	CEdge* e1=new CEdge(1,2,1,10);
-	CEdge* e2=new CEdge(2,1,1,10);
-	CEdge* e3=new CEdge(1,7,1,10);
-	CEdge* e4=new CEdge(7,1,1,10);
-	CEdge* e5=new CEdge(7,10,1,10);
-	CEdge* e6=new CEdge(10,7,1,10);
-	CEdge* e7=new CEdge(3,2,1,10);
-	CEdge* e8=new CEdge(2,3,1,10);
-	CEdge* e9=new CEdge(3,4,1,10);
-	CEdge* e10=new CEdge(4,3,1,10);
-	CEdge* e11=new CEdge(4,10,1,10);
-	CEdge* e12=new CEdge(10,4,1,10);
-	CEdge* e13=new CEdge(1,5,1,10);
-	CEdge* e14=new CEdge(5,1,1,10);
-	CEdge* e15=new CEdge(6,5,1,10);
-	CEdge* e16=new CEdge(5,6,1,10);
-	CEdge* e17=new CEdge(6,10,1,10);
-	CEdge* e18=new CEdge(10,6,1,10);
-	CEdge* e19=new CEdge(8,10,1,10);
-	CEdge* e20=new CEdge(10,8,1,10);
-	CEdge* e21=new CEdge(9,10,1,10);
-	CEdge* e22=new CEdge(10,9,1,10);
-	listEdge.push_back(e1);
-	listEdge.push_back(e2);
-	listEdge.push_back(e3);
-	listEdge.push_back(e4);
-	listEdge.push_back(e5);
-	listEdge.push_back(e6);
-	listEdge.push_back(e7);
-	listEdge.push_back(e8);
-	listEdge.push_back(e9);
-	listEdge.push_back(e10);
-	listEdge.push_back(e11);
-	listEdge.push_back(e12);
-	listEdge.push_back(e13);
-	listEdge.push_back(e14);
-	listEdge.push_back(e15);
-	listEdge.push_back(e16);
-	listEdge.push_back(e17);
-	listEdge.push_back(e18);
-	listEdge.push_back(e19);
-	listEdge.push_back(e20);
-	listEdge.push_back(e21);
-	listEdge.push_back(e22);
+	int i,j;
+	//the edge between the root and the first level of the tree
+	for(i=2;i<=9;i++)
+	{
+		CEdge* e1=new CEdge(1,i,1,10);
+		listEdge.push_back(e1);
+	}
+	//the second level
+	j=2;//father beginning with 2
+	int flag=1;//j++ per 2 loops
+	for(i=10;i<=25;i++)
+	{
+		CEdge* e2=new CEdge(j,i,1,10);
+		listEdge.push_back(e2);
+		if(flag%2==0) j++;
+	}
+	//the third level
+	j=10;//father beginning with 10
+	flag=1;//j++ per 8 loops
+	for(i=26;i<=153;i++)
+	{
+		CEdge* e3=new CEdge(j,i,1,10);
+		listEdge.push_back(e3);
+		if(flag%8==0) j++;
+	}
+
 	CGraph g(listEdge);
 	g.p1();
 	g.p2();
