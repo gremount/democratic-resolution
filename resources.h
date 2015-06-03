@@ -23,20 +23,20 @@ class CGraph{
 private:
 	int numVertex;
 	int numEdge;
-	list<CEdge*> IncidentList;
+	list<CEdge*> IncidentList;//图的所有边组成的链表
 public:
 	set<int> S;
 	set<int> V;
 	int d[N+10];
 	int p[N+10];
-
+	//p1  一个map，其中元素是度数和顶点编号构成的pair。按照度数的降序排列。
 	map<int,int> degree_vertex;
 	multimap<int,int> degree_vertex2;
-
+	//p2  邻接链表
 	map<int,list<int>> adjlist;
-	
+	//p3  邻接矩阵
 	vector<vector<CEdge*>> adjmatrix;
-	
+	//p4  给定一个顶点，求一个list，该list中存储了与该顶点关联的所有边
 	map<int,list<CEdge*>> nelist;
 	
 	CGraph(char* inputFile);
