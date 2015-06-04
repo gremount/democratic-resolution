@@ -27,8 +27,9 @@ private:
 public:
 	set<int> S;
 	set<int> V;
-	int d[N+10];
-	int p[N+10];
+	int d[N+10][N+10];
+	int p[N+10][N+10];
+	int rack[N+10];// 0<=rack[i]<=16 
 	//p1  一个map，其中元素是度数和顶点编号构成的pair。按照度数的降序排列。
 	map<int,int> degree_vertex;
 	multimap<int,int> degree_vertex2;
@@ -123,25 +124,25 @@ public:
 			printf("%d %d\n",(*it2)->getTail(),(*it2)->getHead());
 	}
 	
-	void Update(int i){
+	void Update(int s,int i){
 		list<CEdge*>::iterator it,iend;
 		it=nelist[i].begin();
 		iend=nelist[i].end();
 		for(;it!=iend;it++)
-			if((*it)->getWeight()+d[i]<d[(*it)->getHead()]){
-				d[(*it)->getHead()]=(*it)->getWeight()+d[i];
-				p[(*it)->getHead()]=i;
+			if((*it)->getWeight()+d[s][i]<d[s][(*it)->getHead()]){
+				d[s][(*it)->getHead()]=(*it)->getWeight()+d[s][i];
+				p[s][(*it)->getHead()]=i;
 			}
 	}
 
-	int FindMin(){
+	int FindMin(int s){
 		set<int>::iterator vi,vend;
 		vend=V.end();
 		int mini=10000000;
 		int loc=0;
 		for(vi=V.begin();vi!=vend;vi++)
-			if(mini>=d[*vi])
-				{mini=d[*vi];loc=*vi;}
+			if(mini>=d[s][*vi])
+				{mini=d[s][*vi];loc=*vi;}
 		return loc;
 	}
 
@@ -150,18 +151,18 @@ public:
 		for(i=1;i<=N;i++)
 			V.insert(i);
 		for(i=1;i<=N;i++)
-			{d[i]=INF;p[i]=-2;}
+			{d[s][i]=INF;p[s][i]=-2;}
 		S.insert(s);
 		V.erase(s);
-		d[s]=0;
-		p[s]=-1;
-		Update(s);
+		d[s][s]=0;
+		p[s][s]=-1;
+		Update(s,s);
 		while (V.size()!=0){
-			j=FindMin();
+			j=FindMin(s);
 			S.insert(j);
 			V.erase(j);
-			Update(j);
+			Update(s,j);
 					}
-		printf("\n 1->8:%d\n",d[153]);
+		printf("\n 1->8:%d\n",d[s][153]);
 	}
 };

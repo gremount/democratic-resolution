@@ -76,7 +76,8 @@ int main()
 	//g.p2();
 	//g.p3();
 	g.p4();
-	g.DijkstraAlg(g,1);
+	for(i=26;i<=153;i++)
+		g.DijkstraAlg(g,i);
 	getchar();
 	return 0;
 }

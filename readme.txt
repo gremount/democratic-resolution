@@ -9,3 +9,9 @@ control: FTM(Fault-Tolerance Module) CBM(Core-Bandwidth Module) GBM(Guaranteed-B
 input: request injection module
 
 output: winning proposal
+
+topo: 1-8-16-128
+1:   1
+8:   2 3 4 5 ... 9
+16:  10 11 12 ... 25
+128: 26 27 28 ... 153
