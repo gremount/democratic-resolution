@@ -25,8 +25,8 @@ private:
 	int numEdge;
 	list<CEdge*> IncidentList;//图的所有边组成的链表
 public:
-	set<int> S;
-	set<int> V;
+	set<int> S[N+10];
+	set<int> V[N+10];
 	int d[N+10][N+10];
 	int p[N+10][N+10];
 	int rack[N+10];// 0<=rack[i]<=16 
@@ -116,12 +116,8 @@ public:
 		for(it=IncidentList.begin();it!=iend;it++){
 			nelist[(*it)->getTail()].push_back(*it);
 		}
-		printf("\n");
-		printf("project 4:\n");
 		list<CEdge*>::iterator it2,iend2;
 		iend2=nelist[3].end();
-		for(it2=nelist[3].begin();it2!=iend2;it2++)
-			printf("%d %d\n",(*it2)->getTail(),(*it2)->getHead());
 	}
 	
 	void Update(int s,int i){
@@ -137,10 +133,10 @@ public:
 
 	int FindMin(int s){
 		set<int>::iterator vi,vend;
-		vend=V.end();
+		vend=V[s].end();
 		int mini=10000000;
 		int loc=0;
-		for(vi=V.begin();vi!=vend;vi++)
+		for(vi=V[s].begin();vi!=vend;vi++)
 			if(mini>=d[s][*vi])
 				{mini=d[s][*vi];loc=*vi;}
 		return loc;
@@ -149,20 +145,20 @@ public:
 	void DijkstraAlg(CGraph &g,int s){
 		int i,j;
 		for(i=1;i<=N;i++)
-			V.insert(i);
+			V[s].insert(i);
 		for(i=1;i<=N;i++)
 			{d[s][i]=INF;p[s][i]=-2;}
-		S.insert(s);
-		V.erase(s);
+		S[s].insert(s);
+		V[s].erase(s);
 		d[s][s]=0;
 		p[s][s]=-1;
 		Update(s,s);
-		while (V.size()!=0){
+		while (V[s].size()!=0){
 			j=FindMin(s);
-			S.insert(j);
-			V.erase(j);
+			S[s].insert(j);
+			V[s].erase(j);
 			Update(s,j);
 					}
-		printf("\n 1->8:%d\n",d[s][153]);
+		printf("\n %d->153:%d  p=%d \n",s,d[s][153],p[s][153]);
 	}
 };

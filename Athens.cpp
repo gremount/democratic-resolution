@@ -60,6 +60,7 @@ int main()
 		CEdge* e2=new CEdge(j,i,1,10);
 		listEdge.push_back(e2);
 		if(flag%2==0) j++;
+		flag++;
 	}
 	//the third level
 	j=10;//father beginning with 10
@@ -69,6 +70,7 @@ int main()
 		CEdge* e3=new CEdge(j,i,1,10);
 		listEdge.push_back(e3);
 		if(flag%8==0) j++;
+		flag++;
 	}
 
 	CGraph g(listEdge);
