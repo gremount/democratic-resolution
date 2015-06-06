@@ -1,9 +1,12 @@
-﻿#include "common.h"
+﻿#pragma once
+#include "common.h"
+
 class CEdge{
 private:
 	int tail, head;
 	int weight, capacity;
 public:
+	int bw_utli;//用来记录link当前所用带宽
 	CEdge(int a, int b, int c, int d);
 	CEdge(int a, int b, int c);
 	CEdge(CEdge &x);
@@ -41,6 +44,7 @@ public:
 	//p4  给定一个顶点，求一个list，该list中存储了与该顶点关联的所有边
 	map<int,list<CEdge*>> nelist;
 	
+	CGraph();
 	CGraph(char* inputFile);
 	CGraph(list<CEdge*> listEdge);
 	//CGraph(CGraph &);

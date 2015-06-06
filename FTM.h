@@ -1,19 +1,17 @@
-#include "common.h"
+#pragma once
 #include "resources.h"
 
 class FTM{
-private:
-		
 public:
-	FTM(){};
+	CGraph ng;
+	FTM();
 
-	CGraph propose(list<pair<int,int>> requests, CGraph g)
+	void propose(list<pair<int,int>> requests, CGraph g)
 	{
-		CGraph ng = g;
+		ng = g;
 		int numVMs;
 		int numOpenSlots;//record the rest space in racks
 		int openRackIndex,rackIndex,length;
-		int openRack[N+10];// 0<=openRacks[i]<=16 
 		list<pair<int,int>>::iterator it,iend;
 		iend = requests.end();
 		for(it = requests.begin();it!=iend;it++)
@@ -21,17 +19,19 @@ public:
 			numVMs = (*it).first;
 			numOpenSlots = ng.getNumOpenSlots();
 			if(numOpenSlots < numVMs)
-				return ng;
+			{
+				break;
+				printf("!!!!there is not enough space for the VMs\n");
+			}
 			openRackIndex = 0;
-			length = ng.rack.size();
+			length = 128;
 			for(int i=1;i<=numVMs;i++)
 			{
 				rackIndex = openRackIndex%length;
-				ng.rack[rackIndex]++;
+				ng.rack[26+rackIndex]++;
 				openRackIndex++;
 			}
 			ng.NumOpenSlots = ng.NumOpenSlots - numVMs;
 		}
-		return ng;
 	}
 };

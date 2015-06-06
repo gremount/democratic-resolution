@@ -1,5 +1,5 @@
-#include "resources.h"
-
+#pragma once
+#include "FTM.h"
 
 
 CEdge::CEdge(int a, int b, int c, int d){
@@ -7,12 +7,14 @@ CEdge::CEdge(int a, int b, int c, int d){
 	head=b;
 	weight=c;
 	capacity=d;
+	bw_utli=0;
 }
 
 CEdge::CEdge(int a, int b, int c){
 	head=b;
 	tail=a;
 	weight=c;
+	bw_utli=0;
 }
 
 CEdge::CEdge(CEdge & x){
@@ -20,6 +22,7 @@ CEdge::CEdge(CEdge & x){
 	head=x.getHead();
 	weight=x.getWeight();
 	capacity=x.getCap();
+	bw_utli=x.bw_utli;
 }
 
 CGraph::CGraph(list<CEdge*> listEdge){
@@ -41,31 +44,9 @@ CGraph::CGraph(list<CEdge*> listEdge){
 		rack[i]=0;
 }
 
-CGraph FTM_propose(list<pair<int,int>> requests, CGraph g)
-{
-	CGraph ng = g;
-	int numVMs;
-	int numOpenSlots;//record the rest space in racks
-	int openRackIndex,rackIndex,length;
-	list<pair<int,int>>::iterator it,iend;
-	iend = requests.end();
-	for(it = requests.begin();it!=iend;it++)
-		numVMs = (*it).first;
-		numOpenSlots = ng.getNumOpenSlots();
-		if(numOpenSlots < numVMs)
-			return ng;
-		openRackIndex = 0;
-		length = 128;
-		for(int i=1;i<=numVMs;i++)
-		{
-			rackIndex = openRackIndex%length;
-			ng.rack[26+rackIndex]++;
-			openRackIndex++;
-		}
-		ng.NumOpenSlots = ng.NumOpenSlots - numVMs;
-	}
-	return ng;
-}
+CGraph::CGraph(){;}
+
+FTM::FTM(){;}
 
 int main()
 {
@@ -113,10 +94,11 @@ int main()
 	list<pair<int,int>> requests;
 	pair<int,int> p(129,100);
 	requests.push_back(p);
-	g = FTM_propose(requests,g);
-	
+	FTM f;
+	f.propose(requests,g);
+
 	for(i=26;i<=50;i++)
-		printf("rack[%d]: %d\n", i,g.rack[i]);
+		printf("rack[%d]: %d\n", i,f.ng.rack[i]);
 	getchar();
 	return 0;
 }
