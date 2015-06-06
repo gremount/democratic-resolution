@@ -44,10 +44,6 @@ CGraph::CGraph(list<CEdge*> listEdge){
 		rack[i]=0;
 }
 
-CGraph::CGraph(){;}
-
-FTM::FTM(){;}
-
 int main()
 {
 	list<CEdge*> listEdge;

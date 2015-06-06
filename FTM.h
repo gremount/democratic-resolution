@@ -4,7 +4,7 @@
 class FTM{
 public:
 	CGraph ng;
-	FTM();
+	FTM(){;}
 
 	void propose(list<pair<int,int>> requests, CGraph g)
 	{

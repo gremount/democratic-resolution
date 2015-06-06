@@ -44,7 +44,7 @@ public:
 	//p4  给定一个顶点，求一个list，该list中存储了与该顶点关联的所有边
 	map<int,list<CEdge*>> nelist;
 	
-	CGraph();
+	CGraph(){;}
 	CGraph(char* inputFile);
 	CGraph(list<CEdge*> listEdge);
 	//CGraph(CGraph &);
