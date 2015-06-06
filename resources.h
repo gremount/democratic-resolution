@@ -29,7 +29,8 @@ public:
 	set<int> V[N+10];
 	int d[N+10][N+10];
 	int p[N+10][N+10];
-	int rack[N+10];// 0<=rack[i]<=16 
+	int NumOpenSlots;
+	vector<int> rack;// 0<=rack[i]<=16 
 	//p1  一个map，其中元素是度数和顶点编号构成的pair。按照度数的降序排列。
 	map<int,int> degree_vertex;
 	multimap<int,int> degree_vertex2;
@@ -43,6 +44,9 @@ public:
 	CGraph(char* inputFile);
 	CGraph(list<CEdge*> listEdge);
 	CGraph(CGraph &);
+	int getNumOpenSlots(){
+		return NumOpenSlots;
+	}
 	int getNumVertex(){
 		return numVertex;
 	}

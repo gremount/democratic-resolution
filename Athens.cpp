@@ -1,4 +1,5 @@
 #include "resources.h"
+#include "FTM.h"
 
 
 CEdge::CEdge(int a, int b, int c, int d){
@@ -35,7 +36,9 @@ CGraph::CGraph(list<CEdge*> listEdge){
 		CEdge* e=new CEdge((*it)->getHead(),(*it)->getTail(),1,10);
 		IncidentList.push_back(e);
 	}
+	NumOpenSlots = 0;
 }
+
 
 int main()
 {
@@ -76,10 +79,16 @@ int main()
 	CGraph g(listEdge);
 	//g.p1();
 	//g.p2();
-	//g.p3();
+	g.p3();//adjacency matrix
 	g.p4();
 	for(i=26;i<=153;i++)
 		g.DijkstraAlg(g,i);
+	list<pair<int,int>> requests;
+	pair<int,int> p(5,100);
+	requests.push_back(p);
+	FTM ftm();
+	g = ftm.propose(requests,g);
+
 	getchar();
 	return 0;
 }
