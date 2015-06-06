@@ -30,7 +30,7 @@ public:
 	int d[N+10][N+10];
 	int p[N+10][N+10];
 	int NumOpenSlots;
-	vector<int> rack;// 0<=rack[i]<=16 
+	int rack[N+10];// 0<=rack[i]<=16 
 	//p1  一个map，其中元素是度数和顶点编号构成的pair。按照度数的降序排列。
 	map<int,int> degree_vertex;
 	multimap<int,int> degree_vertex2;
@@ -43,7 +43,7 @@ public:
 	
 	CGraph(char* inputFile);
 	CGraph(list<CEdge*> listEdge);
-	CGraph(CGraph &);
+	//CGraph(CGraph &);
 	int getNumOpenSlots(){
 		return NumOpenSlots;
 	}
@@ -108,9 +108,9 @@ public:
 			//CEdge* e = new CEdge((*it)->getTail(),(*it)->getHead(),(*it)->getWeight(),(*it)->getCap());
 			adjmatrix[(*it)->getTail()][(*it)->getHead()] = *it ;
 		}
-		printf("\n");
-		printf("project 3:\n");
-		printf("%d,%d",adjmatrix[2][3]->getTail(),adjmatrix[2][3]->getHead());
+		//printf("\n");
+		//printf("project 3:\n");
+		//printf("%d,%d",adjmatrix[2][3]->getTail(),adjmatrix[2][3]->getHead());
 	}
 
 	void p4(){
@@ -162,7 +162,7 @@ public:
 			S[s].insert(j);
 			V[s].erase(j);
 			Update(s,j);
-					}
-		printf("\n %d->153:%d  p=%d \n",s,d[s][153],p[s][153]);
+		}
+		//printf("\n %d->153:%d  p=%d \n",s,d[s][153],p[s][153]);
 	}
 };

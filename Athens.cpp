@@ -1,5 +1,5 @@
 #include "resources.h"
-#include "FTM.h"
+
 
 
 CEdge::CEdge(int a, int b, int c, int d){
@@ -36,9 +36,36 @@ CGraph::CGraph(list<CEdge*> listEdge){
 		CEdge* e=new CEdge((*it)->getHead(),(*it)->getTail(),1,10);
 		IncidentList.push_back(e);
 	}
-	NumOpenSlots = 0;
+	NumOpenSlots = 128*8;
+	for(int i=1;i<=N;i++)
+		rack[i]=0;
 }
 
+CGraph FTM_propose(list<pair<int,int>> requests, CGraph g)
+{
+	CGraph ng = g;
+	int numVMs;
+	int numOpenSlots;//record the rest space in racks
+	int openRackIndex,rackIndex,length;
+	list<pair<int,int>>::iterator it,iend;
+	iend = requests.end();
+	for(it = requests.begin();it!=iend;it++)
+		numVMs = (*it).first;
+		numOpenSlots = ng.getNumOpenSlots();
+		if(numOpenSlots < numVMs)
+			return ng;
+		openRackIndex = 0;
+		length = 128;
+		for(int i=1;i<=numVMs;i++)
+		{
+			rackIndex = openRackIndex%length;
+			ng.rack[26+rackIndex]++;
+			openRackIndex++;
+		}
+		ng.NumOpenSlots = ng.NumOpenSlots - numVMs;
+	}
+	return ng;
+}
 
 int main()
 {
@@ -81,14 +108,15 @@ int main()
 	//g.p2();
 	g.p3();//adjacency matrix
 	g.p4();
-	for(i=26;i<=153;i++)
-		g.DijkstraAlg(g,i);
+	//for(i=26;i<=153;i++)
+		//g.DijkstraAlg(g,i);
 	list<pair<int,int>> requests;
-	pair<int,int> p(5,100);
+	pair<int,int> p(129,100);
 	requests.push_back(p);
-	FTM ftm();
-	g = ftm.propose(requests,g);
-
+	g = FTM_propose(requests,g);
+	
+	for(i=26;i<=50;i++)
+		printf("rack[%d]: %d\n", i,g.rack[i]);
 	getchar();
 	return 0;
 }
