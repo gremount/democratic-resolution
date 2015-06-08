@@ -4,19 +4,25 @@
 class FTM{
 public:
 	CGraph ng;
-	FTM(){;}
+	int bw_core_links, bw_all_links;
+	float wcs;
+	FTM(){ ; }
 
 	void propose(list<pair<int,int>> requests, CGraph g)
 	{
 		ng = g;
-		int numVMs;
+		int numVMs,numVMs_step;
 		int numOpenSlots;//record the rest space in racks
 		int openRackIndex,rackIndex,length;
 		list<pair<int,int>>::iterator it,iend;
 		iend = requests.end();
+		for (int i = 1; i <= N; i++)
+			ng.mline_step[i] = 0;
+		numVMs_step = 0;
 		for(it = requests.begin();it!=iend;it++)
 		{
 			numVMs = (*it).first;
+			numVMs_step += numVMs;
 			numOpenSlots = ng.getNumOpenSlots();
 			if(numOpenSlots < numVMs)
 			{
@@ -60,7 +66,22 @@ public:
 				}
 				count++;
 			}
+			for (i = 2; i <= N;i++)
+				ng.mline_all[i] += ng.mline[i];
+			for (i = 2; i <= N; i++)
+				ng.mline_step[i] += ng.mline[i];
+			for (i = 2; i <= N; i++)
+				ng.mline[i] = 0;
 			ng.NumOpenSlots = ng.NumOpenSlots - numVMs;
 		}
+		int sum_core_links = 0, sum_all_links = 0;
+		for (int i = 2; i <= N; i++)
+			sum_all_links += ng.mline_step[i];
+		for (int i = 2; i <= 9; i++)
+			sum_core_links += ng.mline_step[i];
+		bw_all_links = sum_all_links/152;
+		bw_core_links = sum_core_links/8;
+		wcs = 1 - (float)ng.rack[26] / (float)numVMs_step;
+		
 	}
 };

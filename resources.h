@@ -34,7 +34,10 @@ public:
 	int p[N+10][N+10];
 	int NumOpenSlots;
 	int rack[N+10];// 0<=rack[i]<=16 
-	int mline[N + 10];// record all the utlization of links in the graph
+	int mline[N + 10];// in a request: record all the utlization of links in the graph
+	int mline_all[N + 10];// in all requests: record all the utlization of links in the graph
+	int mline_step[N + 10];// in a step requests: record all the utlization of links in the graph
+
 
 	//matrix  邻接矩阵
 	int adjmatrix[N+10][N+10];
@@ -61,7 +64,11 @@ public:
 	void matrix(){
 		int i,j;
 		for (i = 1; i <= N; i++)
+		{
 			mline[i] = 0;
+			mline_all[i] = 0;
+			mline_step[i] = 0;
+		}
 		for(i=1;i<=N;i++)
 			for(j=1;j<=N;j++)
 				adjmatrix[i][j]=0;

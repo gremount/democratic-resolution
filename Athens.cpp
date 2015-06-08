@@ -86,15 +86,18 @@ int main()
 	for(i=26;i<=153;i++)
 		g.DijkstraAlg(g,i);
 	list<pair<int,int>> requests;
-	pair<int,int> p(129,100);
-	requests.push_back(p);
+	pair<int,int> p1(129,100);
+	pair<int, int> p2(3, 100);
+	requests.push_back(p1);
+	requests.push_back(p2);
 	FTM f;
 	f.propose(requests,g);
 
 	for(i=26;i<=50;i++)
 		printf("rack[%d]: %d\n", i,f.ng.rack[i]);
-	for (i = 2; i <= 10; i++)
-		printf("the utli_bw of link %d is %d \n", i,f.ng.mline[i]);
+	for (i = 26; i <= 30; i++)
+		printf("the utli_bw of link %d is %d \n", i,f.ng.mline_all[i]);
+	printf("%d,%d,%f\n", f.bw_core_links, f.bw_all_links,f.wcs);
 	getchar();
 	return 0;
 }

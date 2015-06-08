@@ -6,7 +6,7 @@ core: Athens
 
 control: 
 FTM(Fault-Tolerance Module) 
-CBM(Core-Bandwidth Module) 
+CBM(Core-Bandwidth Module) --- CBM and GBM are very similar with each other, so we omit the CBM.
 GBM(Guaranteed-Bandwidth Module) 
 SRM(Switch Resource Module)
 
