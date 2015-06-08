@@ -4,7 +4,11 @@ Democratic Resolution of Resource Conflicts Between SDN Control Programs
 
 core: Athens
 
-control: FTM(Fault-Tolerance Module) CBM(Core-Bandwidth Module) GBM(Guaranteed-Bandwidth Module) SRM(Switch Resource Module)
+control: 
+FTM(Fault-Tolerance Module) 
+CBM(Core-Bandwidth Module) 
+GBM(Guaranteed-Bandwidth Module) 
+SRM(Switch Resource Module)
 
 input: request injection module
 
@@ -15,3 +19,5 @@ topo: 1-8-16-128
 8:   2 3 4 5 ... 9
 16:  10 11 12 ... 25
 128: 26 27 28 ... 153
+
+the index of rack and the index of ToR switch is consistent. For example, rack[30] <---> s[30]

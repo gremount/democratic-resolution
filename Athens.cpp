@@ -81,12 +81,10 @@ int main()
 	}
 
 	CGraph g(listEdge);
-	//g.p1();
-	//g.p2();
-	g.p3();//adjacency matrix
+	g.matrix();//adjacency matrix
 	g.p4();
-	//for(i=26;i<=153;i++)
-		//g.DijkstraAlg(g,i);
+	for(i=26;i<=153;i++)
+		g.DijkstraAlg(g,i);
 	list<pair<int,int>> requests;
 	pair<int,int> p(129,100);
 	requests.push_back(p);
