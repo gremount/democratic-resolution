@@ -25,11 +25,40 @@ public:
 			}
 			openRackIndex = 0;
 			length = 128;
-			for(int i=1;i<=numVMs;i++)
+			int i, j;
+			for(i=1;i<=numVMs;i++)
 			{
-				rackIndex = openRackIndex%length;
-				ng.rack[26+rackIndex]++;
+				rackIndex = 26 + openRackIndex%length;
+				if (ng.rack[rackIndex] == 16) continue;// if the rack space is not enough, use the next rack
+				ng.rack[rackIndex]++;
+				ng.mline[rackIndex] += (*it).second;//modify the util_bw of third level of links
 				openRackIndex++;
+			}
+			//modify the util_bw of second level of links
+			i = 10;
+			int count = 1;
+			for (j = 26; j <= 153; j++)
+			{
+				ng.mline[i] += ng.mline[j];
+				if (count % 8 == 0) 
+				{ 
+					if (ng.mline[i] > (numVMs*(*it).second - ng.mline[i])) ng.mline[i] = numVMs - ng.mline[i];
+					i++; 
+				}
+				count++;
+			}
+			//modify the util_bw of core links
+			i = 2;
+			count = 1;
+			for (j = 10; j <= 25; j++)
+			{
+				ng.mline[i] += ng.mline[j];
+				if (count % 2 == 0)
+				{
+					if (ng.mline[i] > (numVMs*(*it).second - ng.mline[i])) ng.mline[i] = numVMs - ng.mline[i];
+					i++;
+				}
+				count++;
 			}
 			ng.NumOpenSlots = ng.NumOpenSlots - numVMs;
 		}

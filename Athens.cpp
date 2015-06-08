@@ -93,6 +93,8 @@ int main()
 
 	for(i=26;i<=50;i++)
 		printf("rack[%d]: %d\n", i,f.ng.rack[i]);
+	for (i = 2; i <= 10; i++)
+		printf("the utli_bw of link %d is %d \n", i,f.ng.mline[i]);
 	getchar();
 	return 0;
 }
