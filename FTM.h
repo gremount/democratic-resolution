@@ -35,7 +35,12 @@ public:
 			for(i=1;i<=numVMs;i++)
 			{
 				rackIndex = 26 + openRackIndex%length;
-				if (ng.rack[rackIndex] == 16) continue;// if the rack space is not enough, use the next rack
+				// if the rack space is not enough, use the next rack
+				while (1)
+				{	
+					if (ng.rack[rackIndex] == 16) rackIndex++;
+					else break;
+				}
 				ng.rack[rackIndex]++;
 				ng.mline[rackIndex] += (*it).second;//modify the util_bw of third level of links
 				openRackIndex++;
