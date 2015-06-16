@@ -48,7 +48,7 @@ int main()
 {
 	list<CEdge*> listEdge;
 	int i,j;
-	
+
 	/*Our experiments emulate a network with a single-rooted, three-level tree topology:
 	 *specifically, a 1-8-16 tree with 128 top-of-rack (ToR) switches.
 	 */
