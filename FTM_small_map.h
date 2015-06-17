@@ -89,6 +89,7 @@ public:
 		{
 			if(implement2[i]<implement2[i+1]) numone=i+1;
 		}
+
 		
 	}
 	
