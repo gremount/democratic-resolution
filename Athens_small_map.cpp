@@ -88,10 +88,11 @@ int main()
 	//for (i = 26; i <= 153; i++)
 		//g.DijkstraAlg(g, i);
 	pair<int, int> req2(16,100);
+	
 	FTM f;
 	//CBM c;
 	f.propose(req2,all_links_bw2,rack2);
-
+	
 	for (i = 8; i <= 15; i++)
 		printf("rack[%d]: %d\n", i, f.rack[i]);
 

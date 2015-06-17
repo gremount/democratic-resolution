@@ -6,10 +6,15 @@ public:
 	CGraph ng;
 	int bw_core_links, bw_all_links;
 	float wcs;
-	int rack[N+10];// 0<=rack[i]<=16 
+	int implement[N+10];//in one step, record the rack
+	int rack[N+10];// After accumulations, 0<=rack[i]<=16 
 	int link_bw[N+10];//in one step, record the utilization of links
 	int all_links_bw[N+10];//the sum of link_bw in all steps
-	FTM(){ for(int i=1;i<=N;i++){all_links_bw[i]=0;rack[i]=0;} }
+	FTM()
+	{ 
+		for(int i=1;i<=N;i++){all_links_bw[i]=0;rack[i]=0;}
+		
+	}
 
 	void propose(pair<int, int> req, int all_links_bw2[], int rack2[])
 	{
@@ -20,6 +25,7 @@ public:
 			all_links_bw[i] = all_links_bw2[i];
 			rack[i] = rack2[i];
 			link_bw[i] = 0;
+			implement[i] = 0;
 		}
 		numVMs_step = 0;
 		numVMs = req.first;
@@ -37,6 +43,7 @@ public:
 				else break;
 			}
 			rack[rackIndex]++;
+			implement[rackIndex]++;
 			link_bw[rackIndex] += req.second;//modify the util_bw of third level of links
 			openRackIndex++;
 		}
@@ -71,11 +78,18 @@ public:
 			all_links_bw[i] += link_bw[i];
 			printf("link %d: %d\n",i,all_links_bw[i]);
 		}
-		ng.NumOpenSlots = ng.NumOpenSlots - numVMs;
+		
 		
 	}
-	void evaluate()
+	float evaluate(int req, int link_bw2[], int rack2[],int implement2[])
 	{
-
+		int numone=8;//record the rack number with the biggest capacity
+		int i,j;
+		for(i=8;i<=15;i++)
+		{
+			if(implement2[i]<implement2[i+1]) numone=i+1;
+		}
+		
 	}
+	
 };
