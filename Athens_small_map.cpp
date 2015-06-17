@@ -38,16 +38,19 @@ CGraph::CGraph(list<CEdge*> listEdge){
 		CEdge* e = new CEdge((*it)->getHead(), (*it)->getTail(), 1, 10);
 		IncidentList.push_back(e);
 	}
-	NumOpenSlots = 8 * 16;
-	for (int i = 1; i <= N; i++)
-		rack[i] = 0;
 }
 
 int main()
 {
 	list<CEdge*> listEdge;
 	int i, j;
-
+	int all_links_bw2[N+10];
+	int rack2[N+10];
+	for (i=1;i<=N;i++)
+	{
+		all_links_bw2[i]=0;
+		rack2[i]=0;
+	}
 	/*Our experiments emulate a network with a single-rooted, three-level tree topology:
 	*specifically, a 1-2-4 tree with 8 top-of-rack (ToR) switches.
 	*/
@@ -80,21 +83,17 @@ int main()
 	}
 
 	CGraph g(listEdge);
-	g.matrix();//adjacency matrix
+	//g.matrix();
 	g.p4();
 	//for (i = 26; i <= 153; i++)
 		//g.DijkstraAlg(g, i);
-	list<pair<int, int>> requests;
-	pair<int, int> p1(16, 100);
-	//pair<int, int> p2(3, 100);
-	requests.push_back(p1);
-	//requests.push_back(p2);
+	pair<int, int> req2(16,100);
 	FTM f;
 	//CBM c;
-	f.propose(requests, g);
+	f.propose(req2,all_links_bw2,rack2);
 
 	for (i = 8; i <= 15; i++)
-		printf("rack[%d]: %d\n", i, f.ng.rack[i]);
+		printf("rack[%d]: %d\n", i, f.rack[i]);
 
 	/*
 	for (i = 26; i <= 30; i++)
