@@ -1,5 +1,6 @@
 #pragma once
 #include "FTM_small_map.h"
+#include "CBM_small_map.h"
 
 CEdge::CEdge(int a, int b, int c, int d){
 	tail = a;
@@ -87,14 +88,38 @@ int main()
 	g.p4();
 	//for (i = 26; i <= 153; i++)
 		//g.DijkstraAlg(g, i);
-	pair<int, int> req2(16,100);
-	
+	pair<int, int> req1(20,100);
+	pair<int, int> req2(2, 100);
 	FTM f;
-	//CBM c;
+	CBM c;
+	//req1
+	c.propose(req1, all_links_bw2, rack2);
+	f.propose(req1, all_links_bw2, rack2);
+	float cc,ff;
+	f.req_num++;
+	cc=c.evaluate(req1, c.all_links_bw, c.rack, c.implement);
+	ff = f.evaluate(req1, c.all_links_bw, c.rack, c.implement);
+	printf("cbm result: %f and ftm result: %f\n", cc, ff);
+	f.wcs_record += f.wcs;
+
+	f.propose(req2, c.all_links_bw, c.rack);
+	c.propose(req2, c.all_links_bw, c.rack);
+	f.req_num++;
+	cc = c.evaluate(req2, f.all_links_bw, f.rack, f.implement);
+	ff = f.evaluate(req2, f.all_links_bw, f.rack, f.implement);
+	printf("cbm result: %f and ftm result: %f\n",cc,ff);
+
+	/*
 	f.propose(req2,all_links_bw2,rack2);
-	
+	f.evaluate(req2, f.all_links_bw, f.rack, f.implement);
+	f.wcs_record += f.wcs;
+	f.propose(req3, f.all_links_bw, f.rack);
+	f.evaluate(req3, f.link_bw, f.rack, f.implement);
+	*/
+
 	for (i = 8; i <= 15; i++)
 		printf("rack[%d]: %d\n", i, f.rack[i]);
+	//printf("wcs: %f\n",f.evaluate(req2,f.all_links_bw,f.rack,f.implement));
 
 	/*
 	for (i = 26; i <= 30; i++)
