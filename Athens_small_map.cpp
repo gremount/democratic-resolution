@@ -1,6 +1,9 @@
 #pragma once
 #include "FTM_small_map.h"
 #include "CBM_small_map.h"
+#include "GBM_small_map.h"
+#include "SRM_small_map.h"
+#include "Voting.h"
 
 CEdge::CEdge(int a, int b, int c, int d){
 	tail = a;
@@ -47,7 +50,7 @@ int main()
 	int i, j;
 	int all_links_bw2[N+10];
 	int rack2[N+10];
-	for (i=1;i<=N;i++)
+	for (i=0;i<=N;i++)
 	{
 		all_links_bw2[i]=0;
 		rack2[i]=0;
@@ -83,31 +86,48 @@ int main()
 		flag++;
 	}
 
-	CGraph g(listEdge);
+	//CGraph g(listEdge);
 	//g.matrix();
-	g.p4();
+	//g.p4();
 	//for (i = 26; i <= 153; i++)
 		//g.DijkstraAlg(g, i);
-	pair<int, int> req1(20,100);
+	pair<int, int> req1(66, 100);
 	pair<int, int> req2(2, 100);
+	
 	FTM f;
 	CBM c;
+	GBM gg;
+	SRM s;
+	
 	//req1
 	c.propose(req1, all_links_bw2, rack2);
 	f.propose(req1, all_links_bw2, rack2);
-	float cc,ff;
-	f.req_num++;
-	cc=c.evaluate(req1, c.all_links_bw, c.rack, c.implement);
-	ff = f.evaluate(req1, c.all_links_bw, c.rack, c.implement);
-	printf("cbm result: %f and ftm result: %f\n", cc, ff);
-	f.wcs_record += f.wcs;
+	gg.propose(req1, all_links_bw2, rack2);
 
+	float co,fo,ggo,so;
+	f.req_num++;
+	co=c.evaluate(req1, c.all_links_bw, c.rack, c.implement);
+	fo = f.evaluate(req1, c.all_links_bw, c.rack, c.implement);
+	ggo = gg.evaluate(c.link_bw);
+	so = s.evaluate(c.implement);
+	printf("cbm result: %f and ftm result: %f \n and gbm: %f  and srm: %f\n", co, fo,ggo,so);
+	f.wcs_record += f.wcs;
+	
+	int tmp[3][4] = { { 1, 3, 2, 3 }, { 2, 2, 1, 1 }, { 3, 1, 3, 2 } };
+	Table tt(tmp);
+	int finalWinner;
+	Vote vv;
+	finalWinner = vv.Voting(tt, 3);  // scenario 3
+	cout <<"final winner is "<<finalWinner << endl;
+
+	/*
 	f.propose(req2, c.all_links_bw, c.rack);
 	c.propose(req2, c.all_links_bw, c.rack);
 	f.req_num++;
 	cc = c.evaluate(req2, f.all_links_bw, f.rack, f.implement);
 	ff = f.evaluate(req2, f.all_links_bw, f.rack, f.implement);
 	printf("cbm result: %f and ftm result: %f\n",cc,ff);
+	*/
 
 	/*
 	f.propose(req2,all_links_bw2,rack2);
@@ -117,8 +137,8 @@ int main()
 	f.evaluate(req3, f.link_bw, f.rack, f.implement);
 	*/
 
-	for (i = 8; i <= 15; i++)
-		printf("rack[%d]: %d\n", i, f.rack[i]);
+	//for (i = 8; i <= 15; i++)
+		//printf("rack[%d]: %d\n", i, f.rack[i]);
 	//printf("wcs: %f\n",f.evaluate(req2,f.all_links_bw,f.rack,f.implement));
 
 	/*

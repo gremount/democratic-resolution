@@ -138,7 +138,7 @@ public:
 		for (i = 2; i <= N; i++)
 		{
 			all_links_bw[i] += link_bw[i];
-			printf("cbm link %d: %d\n", i, all_links_bw[i]);
+			//printf("cbm link %d: %d\n", i, all_links_bw[i]);
 		}
 	}
 
