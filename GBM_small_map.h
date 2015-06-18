@@ -173,11 +173,11 @@ class GBM{
     {
         float aver;
         float sum = 0;
-        for(int i =1;i<= 15;i++)
+        for(int i =2;i<= 15;i++)
         {
-            sum+= all_link_bw[i];
+			sum+= all_link_bw[i];
         }
-        aver = sum / 15;
+        aver = sum / 14;
         return aver;
     }
 
