@@ -2,153 +2,187 @@
 #include "resources.h"
 #include <math.h>
 #include <functional>
-
 class GBM{
     public:
-    int layer_num = 4;
-    int rack_num = 8;
-    int block_num[15];
+    int layer_num;
+    int rack_num;
+    int joint_num;
+    int layer_joint_num[4];
 
-    int flow_size[15];
-    int gbm_implement[8];
-    int gbm_link_bw[15];
-    int gbm_rack[8];
-    int subnet_vmnum[15];
-    GBM(){;}
+    int block_num[16];
 
-    void implement(int req_num, int x, int y)
+    int gbm_implement[16];
+    int gbm_rack[16];
+    int gbm_link_bw[16];
+    int gbm_all_link_bw[16];
+
+    GBM(){
+		layer_num = 4;
+		rack_num = 8;
+		joint_num = 15;
+		layer_joint_num[0]=1;
+		layer_joint_num[1]=2;
+		layer_joint_num[2]=4;
+		layer_joint_num[3]=8;
+	}
+
+
+
+    void imp(int req_num,int x,int y)
     {
-        if(x != layer_num -1)
+        gbm_implement[y] = req_num;
+        if(x != layer_num - 1)
         {
-            int step = pow(2,layer_num -1 - x);
-            multimap<int,int,greater<int> > sort_map;
-            for(int k = (y+1)*2 - 1;k<(y+2)*2 -1;k++)
+            if(block_num[2*y] > block_num[2*y+1])
             {
-                sort_map.insert(pair<int,int>(block_num[k],k));
-            }
-            multimap<int,int,greater<int> >::iterator it;
-            for(it = sort_map.begin();it!= sort_map.end();it++)
-            {
-                if(req_num > it->first)
+                if(block_num[2*y] < req_num)
                 {
-                    req_num -= it->first;
-                    for(int i = (y+1)*step -1;i <(y +2)*step -1 - step /2;i++)
-                    {
-                        gbm_implement[i-7] = block_num[i];
-                    }
+                    imp(block_num[2*y],x+1,2*y);
+                    imp(req_num-block_num[2*y],x+1,2*y+1);
                 }
                 else
                 {
-                    int a = x + 1;
-                    int b = it->second;
-                    implement(req_num,a,b);
-                        break;
+                    imp(req_num,x+1,2*y);
+                }
+
+            }
+            else
+            {
+                if(block_num[2*y+1] < req_num)
+                {
+                    imp(block_num[2*y+1],x+1,2*y+1);
+                    imp(req_num-block_num[2*y+1],x+1,2*y);
+                }
+                else
+                {
+                    imp(req_num,x+1,2*y+1);
                 }
             }
         }
-        else
-        {
-            gbm_implement[y - 7] = req_num;
-        }
     }
 
-    void propose(pair<int, int> req, int link_bw[], int rack[])
-    {
 
-        for(int i = 0;i < 8;i++)
+
+
+
+    void propose(pair<int, int> req, int all_link_bw[], int rack[])
+    {
+        for(int i = 0;i <= joint_num;i++)
         {
             gbm_implement[i] = 0;
+            gbm_link_bw[i] = 0;
+            gbm_all_link_bw[i] = all_link_bw[i];
             gbm_rack[i] = rack[i];
-        }
-        for(int i = 0;i <15;i++)
-        {
-            gbm_link_bw[i] = link_bw[i];
-            flow_size[i] = 0;
-        }
-        ///initialize
+        }///initialize
 
-        int bw = req.second;
-        int vm_num = req.first;
+        int req_num = req.first;
+        int req_bw = req.second;
 
-        for(int i = 0;i<rack_num;i++)
-        {
-            block_num[i+7] = 16 - rack[i];
-        }
 
-        for(int i = 15 - rack_num -1;i >= 0;i--)
+        for(int i = 8;i<= joint_num;i++)
         {
-            block_num[i] = block_num[2*i+1] + block_num[2*i+2];
+            block_num[i] = 16 - rack[i];
         }
-		/*
-        for(int i = 0;i<15;i++)
+        for(int i = 7; i >= 1;i--)
         {
-            cout<<block_num[i]<<"  ";
+            block_num[i] = block_num[2*i]+block_num[2*i+1];
         }
-		*/
-        int x,y;
+        block_num[0] = 0;
+
+        int beginnum;
+        int endnum = 15;
         int room = 0;
-        int begin_num = 14;
-        int end_num = 14;
-        for(int i = layer_num -1;i >= 0;i--)
+        int x,y;
+
+        for(int i = 3;i >= 0;i--)
         {
-            int step = pow(2,i);
-            begin_num = end_num;
-            end_num = begin_num - step;
-            for(int j = begin_num;j> end_num;j--)
+            beginnum = endnum;
+            endnum -= layer_joint_num[i];
+
+            for(int j = beginnum;j > endnum;j--)
             {
-                if(block_num[j] >= vm_num && block_num[j] > room)
+
+                if(block_num[j] >= req_num && block_num[j] > room)
                 {
                     room = block_num[j];
-                    x=i;y=j;
+                    x = i;
+                    y = j;
                 }
             }
-
-            if(room >= vm_num)
+            if(room >= req_num)
                 break;
         }
-        if(room >= vm_num)
+        if(room >= req_num)
         {
-            implement(vm_num,x,y);
-            //for(int i = 0;i<8;i++)
-              //  cout<<gbm_implement[i]<<"  ";
+            cout<<x<<" "<<y<<endl;
+            imp(req_num,x,y);
 
-            for(int i = 0;i < rack_num;i++)
+
+            for(int i = 7;i>=1;i--)
+                gbm_implement[i] = gbm_implement[2*i] + gbm_implement[2*i+1];
+
+            for(int i = 1;i <= joint_num;i++)
+            {
+                if(gbm_implement[i] > req_num - gbm_implement[i])
+                    gbm_link_bw[i] = req_bw*(req_num - gbm_implement[i]);
+                else
+                    gbm_link_bw[i] = req_bw*gbm_implement[i];
+
+                gbm_all_link_bw[i] += gbm_link_bw[i];
                 gbm_rack[i] += gbm_implement[i];
 
-            for(int i = 0;i<rack_num;i++)
-            {
-                subnet_vmnum[i+7] = gbm_implement[i];
             }
 
-            for(int i = 15 - rack_num -1;i >= 0;i--)
-            {
-                subnet_vmnum[i] = subnet_vmnum[2*i+1] + subnet_vmnum[2*i+2];
-            }
 
-            for(int i = 1;i < 15;i++)
-            {
-                if(vm_num - subnet_vmnum[i] < subnet_vmnum[i])
-                    flow_size[i] = bw * (vm_num - subnet_vmnum[i]);
-                else
-                    flow_size[i] = bw * subnet_vmnum[i];
-            }
-            for(int i = 1;i < 15;i++)
-                gbm_link_bw[i] += flow_size[i];
+
         }
 
-       // cout<<endl;
-       // for(int i = 1;i < 15;i++)
-           // cout<<gbm_link_bw[i]<<"  ";
+        cout<<"link_bw"<<endl;
+        for(int i = 1;i <= joint_num;i++)
+        {
 
+            cout<<gbm_link_bw[i]<<"  ";
+        }
+        cout<<endl;
+
+        cout<<"all_link_bw"<<endl;
+        for(int i = 1;i <= joint_num;i++)
+        {
+
+            cout<<gbm_all_link_bw[i]<<"  ";
+        }
+        cout<<endl;
+
+        cout<<"implement"<<endl;
+        for(int i = 1;i <= joint_num;i++)
+        {
+
+            cout<<gbm_implement[i]<<"  ";
+        }
+        cout<<endl;
+
+        cout<<"rack"<<endl;
+        for(int i = 1;i <= joint_num;i++)
+        {
+
+            cout<<gbm_rack[i]<<"  ";
+        }
+        cout<<endl;
     }
-    int evaluate(int link_bw[])
-	{
-	    int bw_sum = 0;
-	    int i;
-	    for(i = 0;i<15;i++)
-	    {
-	        bw_sum =bw_sum + link_bw[i];
-	    }
-        return bw_sum;
-	}
+    float evaluate(int all_link_bw[])
+    {
+        float aver;
+        float sum = 0;
+        for(int i =1;i<= 15;i++)
+        {
+            sum+= all_link_bw[i];
+        }
+        aver = sum / 15;
+        return aver;
+    }
+
+
+
+
+
 };

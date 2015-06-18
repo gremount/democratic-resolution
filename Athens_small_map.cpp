@@ -104,7 +104,8 @@ int main()
 	f.propose(req1, all_links_bw2, rack2);
 	gg.propose(req1, all_links_bw2, rack2);
 
-	float co,fo,ggo,so;
+	float co,fo,so;
+	float ggo;
 	f.req_num++;
 	co=c.evaluate(req1, c.all_links_bw, c.rack, c.implement);
 	fo = f.evaluate(req1, c.all_links_bw, c.rack, c.implement);

@@ -3,9 +3,10 @@
 
 class SRM{
     public:
-    SRM(){;}
+	int n;
+    SRM(){n=8;}
 
-    int n = 8;
+   
     int evaluate(int implement[])
     {
         int flow_count[15];
