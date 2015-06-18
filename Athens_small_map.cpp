@@ -91,19 +91,17 @@ int main()
 	//g.p4();
 	//for (i = 26; i <= 153; i++)
 		//g.DijkstraAlg(g, i);
-	pair<int, int> req1(66, 100);
-	pair<int, int> req2(2, 100);
+	pair<int, int> req1(33, 100);
+	pair<int, int> req2(16, 100);
+	pair<int, int> req3(17, 100);
 	
 	FTM f;
 	CBM c;
 	GBM gg;
 	SRM s;
 	
-	//req1
+	//req1 
 	c.propose(req1, all_links_bw2, rack2);
-	f.propose(req1, all_links_bw2, rack2);
-	gg.propose(req1, all_links_bw2, rack2);
-
 	float co,fo,so;
 	float ggo;
 	f.req_num++;
@@ -114,6 +112,64 @@ int main()
 	printf("cbm result: %f and ftm result: %f \n and gbm: %f  and srm: %f\n", co, fo,ggo,so);
 	f.wcs_record += f.wcs;
 	
+	//second request
+	c.propose(req2, c.all_links_bw, c.rack);
+	f.req_num++;
+	co=c.evaluate(req2, c.all_links_bw, c.rack, c.implement);
+	fo = f.evaluate(req2, c.all_links_bw, c.rack, c.implement);
+	ggo = gg.evaluate(c.all_links_bw);
+	so = s.evaluate(c.implement);
+	printf("cbm result: %f and ftm result: %f \n and gbm: %f  and srm: %f\n", co, fo,ggo,so);
+	f.wcs_record += f.wcs;
+
+	//third request
+	c.propose(req3, c.all_links_bw, c.rack);
+	f.req_num++;
+	co=c.evaluate(req3, c.all_links_bw, c.rack, c.implement);
+	fo = f.evaluate(req3, c.all_links_bw, c.rack, c.implement);
+	ggo = gg.evaluate(c.all_links_bw);
+	so = s.evaluate(c.implement);
+	printf("cbm result: %f and ftm result: %f \n and gbm: %f  and srm: %f\n", co, fo,ggo,so);
+	f.wcs_record += f.wcs;
+
+	
+	//c.propose(req1, all_links_bw2, rack2);
+	//gg.propose(req1, all_links_bw2, rack2);
+	
+	/*  FTM test
+	//req1
+	f.propose(req1, all_links_bw2, rack2);
+	float co,fo,so;
+	float ggo;
+	f.req_num++;
+	co=c.evaluate(req1, f.all_links_bw, f.rack, f.implement);
+	fo = f.evaluate(req1, f.all_links_bw, f.rack, f.implement);
+	ggo = gg.evaluate(f.all_links_bw);
+	so = s.evaluate(f.implement);
+	printf("cbm result: %f and ftm result: %f \n and gbm: %f  and srm: %f\n", co, fo,ggo,so);
+	f.wcs_record += f.wcs;
+	
+	//second request
+	f.propose(req2, f.all_links_bw, f.rack);
+	f.req_num++;
+	co=c.evaluate(req2, f.all_links_bw, f.rack, f.implement);
+	fo = f.evaluate(req2, f.all_links_bw, f.rack, f.implement);
+	ggo = gg.evaluate(f.all_links_bw);
+	so = s.evaluate(f.implement);
+	printf("cbm result: %f and ftm result: %f \n and gbm: %f  and srm: %f\n", co, fo,ggo,so);
+	f.wcs_record += f.wcs;
+
+	//third request
+	f.propose(req3, f.all_links_bw, f.rack);
+	f.req_num++;
+	co=c.evaluate(req3, f.all_links_bw, f.rack, f.implement);
+	fo = f.evaluate(req3, f.all_links_bw, f.rack, f.implement);
+	ggo = gg.evaluate(f.all_links_bw);
+	so = s.evaluate(f.implement);
+	printf("cbm result: %f and ftm result: %f \n and gbm: %f  and srm: %f\n", co, fo,ggo,so);
+	f.wcs_record += f.wcs;
+	the end of FTM test*/
+
 	int tmp[3][4] = { { 1, 3, 2, 3 }, { 2, 2, 1, 1 }, { 3, 1, 3, 2 } };
 	Table tt(tmp);
 	int finalWinner;
