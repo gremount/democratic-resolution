@@ -45,6 +45,7 @@ public:
 				else break;
 			}
 			rack[rackIndex]++;
+			rack[rackIndex / 2]++;
 			implement[rackIndex]++;
 			link_bw[rackIndex] += req.second;//modify the util_bw of third level of links
 			rackIndex++;

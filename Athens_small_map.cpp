@@ -108,7 +108,7 @@ int main()
 	f.req_num++;
 	co=c.evaluate(req1, c.all_links_bw, c.rack, c.implement);
 	fo = f.evaluate(req1, c.all_links_bw, c.rack, c.implement);
-	ggo = gg.evaluate(c.link_bw);
+	ggo = gg.evaluate(c.all_links_bw);
 	so = s.evaluate(c.implement);
 	printf("cbm result: %f and ftm result: %f \n and gbm: %f  and srm: %f\n", co, fo,ggo,so);
 	f.wcs_record += f.wcs;
