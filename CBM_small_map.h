@@ -41,12 +41,32 @@ public:
 		openRackIndex = 0;
 		length = 8;
 		int i, j;
+		subnet_one = 64 - rack[2];
+		subnet_two = 64 - rack[3];
 		if (subnet_one >= numVMs){
 			for (i = 8; i <= 11; i++)
 			{
 				if (rack[i] == 16)continue;
-				if (rack[i] + numVMs > 16){ numVMs = numVMs - (16 - rack[i]); implement[i] += 16 - rack[i]; rack[i] = 16; rack[i / 2] += 16 - rack[i]; rack[i / 2 / 2] += 16 - rack[i]; rack[i / 2 / 2/2] += 16 - rack[i]; }
-				if (rack[i] + numVMs <= 16){ rack[i] = rack[i] + numVMs; rack[i / 2] += numVMs; rack[i / 2 / 2] += numVMs; rack[i / 2/2/2] += numVMs; implement[i] += numVMs; numVMs = 0; }
+				if (rack[i] + numVMs > 16)
+				{ 
+					numVMs = numVMs - (16 - rack[i]); 
+					//cout << i<<" rack[i]: " << rack[i] << endl;
+					implement[i] += 16 - rack[i]; 
+					rack[i / 2] = rack[i / 2] + 16 - rack[i];
+					rack[i / 2 / 2] += 16 - rack[i]; 
+					rack[i / 2 / 2/2] += 16 - rack[i]; 
+					rack[i] = 16;
+					continue;
+				}
+				else if (rack[i] + numVMs <= 16)
+				{ 
+					rack[i] = rack[i] + numVMs; 
+					rack[i / 2] += numVMs; 
+					rack[i / 2 / 2] += numVMs; 
+					rack[i / 2/2/2] += numVMs; 
+					implement[i] += numVMs; 
+					numVMs = 0; 
+				}
 				if (numVMs == 0) break;
 			}
 		}
@@ -55,8 +75,24 @@ public:
 			for (i = 12; i <= 15; i++)
 			{
 				if (rack[i] == 16)continue;
-				if (rack[i] + numVMs > 16){ numVMs = numVMs - (16 - rack[i]); implement[i] += 16 - rack[i]; rack[i] = 16; rack[i / 2] += 16 - rack[i]; rack[i / 2 / 2] += 16 - rack[i]; rack[i / 2/2/2] += 16 - rack[i]; }
-				else if (rack[i] + numVMs <= 16){ rack[i] = rack[i] + numVMs; rack[i / 2] += numVMs; rack[i / 2 / 2] += numVMs; rack[i / 2/2/2] += numVMs; implement[i] += numVMs; numVMs = 0; }
+				if (rack[i] + numVMs > 16)
+				{ 
+					numVMs = numVMs - (16 - rack[i]); 
+					implement[i] += 16 - rack[i]; 
+					rack[i / 2] += 16 - rack[i]; 
+					rack[i / 2 / 2] += 16 - rack[i]; 
+					rack[i / 2/2/2] += 16 - rack[i];
+					rack[i] = 16;
+				}
+				else if (rack[i] + numVMs <= 16)
+				{ 
+					rack[i] = rack[i] + numVMs;
+					rack[i / 2] += numVMs;
+					rack[i / 2 / 2] += numVMs;
+					rack[i / 2/2/2] += numVMs;
+					implement[i] += numVMs;
+					numVMs = 0; 
+				}
 				if (numVMs == 0) break;
 			}
 		}
@@ -68,13 +104,31 @@ public:
 				for (i = 8; i <= 11; i++)
 				{
 					implement[i] += (16 - rack[i]);
-					rack[i] = 16; rack[i / 2] += 16 - rack[i]; rack[i / 2 / 2] += 16 - rack[i]; rack[i / 2 / 2 / 2] += 16 - rack[i];
+					rack[i / 2] += 16 - rack[i]; 
+					rack[i / 2 / 2] += 16 - rack[i]; 
+					rack[i / 2 / 2 / 2] += 16 - rack[i];
+					rack[i] = 16;
 				}
 				for (i = 12; i <= 15; i++)
 				{
 					if (rack[i] == 16)continue;
-					if (rack[i] + numVMs > 16){ numVMs = numVMs - (16 - rack[i]);  implement[i] += 16 - rack[i]; rack[i] = 16; rack[i / 2] += 16 - rack[i]; rack[i / 2 / 2] += 16 - rack[i]; rack[i / 2 / 2 / 2] += 16 - rack[i]; }
-					else if (rack[i] + numVMs <= 16){ rack[i] = rack[i] + numVMs;  rack[i / 2] += numVMs; rack[i / 2 / 2] += numVMs; rack[i / 2 / 2 / 2] += numVMs; implement[i] += numVMs; numVMs = 0; }
+					if (rack[i] + numVMs > 16)
+					{
+						numVMs = numVMs - (16 - rack[i]); 
+						implement[i] += 16 - rack[i]; 
+						rack[i / 2] += 16 - rack[i];
+						rack[i / 2 / 2] += 16 - rack[i];
+						rack[i / 2 / 2 / 2] += 16 - rack[i]; 
+						rack[i] = 16;
+					}
+					else if (rack[i] + numVMs <= 16)
+					{
+						rack[i] = rack[i] + numVMs;  
+						rack[i / 2] += numVMs; 
+						rack[i / 2 / 2] += numVMs;
+						rack[i / 2 / 2 / 2] += numVMs;
+						implement[i] += numVMs; 
+						numVMs = 0; }
 					if (numVMs == 0) break;
 				}
 			}
@@ -84,13 +138,32 @@ public:
 				for (i = 12; i <= 15; i++)
 				{
 					implement[i] += (16 - rack[i]);
-					rack[i] = 16; rack[i / 2] += 16 - rack[i]; rack[i / 2 / 2] += 16 - rack[i]; rack[i / 2 / 2 / 2] += 16 - rack[i];
+					rack[i / 2] += 16 - rack[i];
+					rack[i / 2 / 2] += 16 - rack[i]; 
+					rack[i / 2 / 2 / 2] += 16 - rack[i];
+					rack[i] = 16;
 				}
 				for (i = 8; i <= 11; i++)
 				{
 					if (rack[i] == 16)continue;
-					if (rack[i] + numVMs > 16){ numVMs = numVMs - (16 - rack[i]); implement[i] += 16 - rack[i]; rack[i] = 16; rack[i / 2] += 16 - rack[i]; rack[i / 2 / 2] += 16 - rack[i]; rack[i / 2 / 2 / 2] += 16 - rack[i]; }
-					else if (rack[i] + numVMs <= 16){ rack[i] = rack[i] + numVMs; rack[i / 2] += numVMs; rack[i / 2 / 2] += numVMs; rack[i / 2 / 2 / 2] += numVMs; implement[i] += numVMs; numVMs = 0; }
+					if (rack[i] + numVMs > 16)
+					{ 
+						numVMs = numVMs - (16 - rack[i]); 
+						implement[i] += 16 - rack[i];
+						rack[i] = 16; 
+						rack[i / 2] += 16 - rack[i];
+						rack[i / 2 / 2] += 16 - rack[i];
+						rack[i / 2 / 2 / 2] += 16 - rack[i]; 
+					}
+					else if (rack[i] + numVMs <= 16)
+					{ 
+						rack[i] = rack[i] + numVMs; 
+						rack[i / 2] += numVMs;
+						rack[i / 2 / 2] += numVMs; 
+						rack[i / 2 / 2 / 2] += numVMs; 
+						implement[i] += numVMs; 
+						numVMs = 0; 
+					}
 					if (numVMs == 0) break;
 				}
 			}

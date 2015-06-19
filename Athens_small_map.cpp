@@ -136,6 +136,14 @@ int main()
 	c.propose(req1, all_links_bw2, rack2);
 	gg.propose(req1, all_links_bw2, rack2);
 	f.req_num++;
+
+	/*
+	cout << endl;
+	for (i = 1; i <= 15; i++)
+		cout << rack[i] << " ";
+	cout << endl;
+	*/
+
 	//for (i = 1; i <= 15; i++)
 	//	cout << f.implement[i] << " ";
 	//cout << endl;
@@ -153,11 +161,11 @@ int main()
 
 	//voting methods
 	int winner;//the winner choosed by the voting methods
-	winner = 1;
+	winner = 2;
 
 	//data update
 	//cout << "********" << f.wcs_FTM << endl;
-	f.wcs_record += f.wcs_FTM;
+	f.wcs_record += f.wcs_CBM;
 	if (winner == 1)
 		s.his_sum = s.evaluate(f.implement);
 	else if (winner == 2)
@@ -178,23 +186,20 @@ int main()
 	//req2 propose()
 	for (i = 1; i <= 15; i++)
 	{
-		rack[i] = f.rack[i];
-		all_links_bw[i] = f.all_links_bw[i];
+		rack[i] = c.rack[i];
+		all_links_bw[i] = c.all_links_bw[i];
 	}
-
-
+	/*
+	cout << endl;
+	for (i = 1; i <= 15; i++)
+		cout << rack[i] << " ";
+	cout << endl;
+	*/
 	f.propose(req2, all_links_bw, rack);
 	c.propose(req2, all_links_bw, rack);
 	gg.propose(req2, all_links_bw, rack);
 	f.req_num++;
-	/*cout << "implement: " << endl;
-	for (i = 1; i <= 15; i++)
-		cout << i << " " ;
-	cout << endl;
-	for (i = 1; i <= 15; i++)
-		cout << gg.gbm_implement[i]<<" ";
-	cout << endl;
-	*/
+	
 	//req2 evaluate()
 	test(req2,f,c,gg,s);
 	for(i=1;i<=3;i++)
@@ -203,8 +208,9 @@ int main()
 			printf("%10.3f ",test_record[i][j]);
 		printf("\n");
 	}
+	winner = 2;
 	//cout << "********"<<f.wcs_FTM << endl;
-	f.wcs_record += f.wcs_FTM;
+	f.wcs_record += f.wcs_CBM;
 	//srm operation
 	if (winner == 1)
 		s.his_sum = s.evaluate(f.implement);
@@ -227,15 +233,22 @@ int main()
 	//req3 propose()
 	for (i = 1; i <= 15; i++)
 	{
-		rack[i] = f.rack[i];
-		all_links_bw[i] = f.all_links_bw[i];
+		rack[i] = c.rack[i];
+		all_links_bw[i] = c.all_links_bw[i];
 	}
-
-
+	
+	for (i = 1; i <= 15; i++)
+		cout << rack[i] << " ";
+	cout << endl;
+	
 	f.propose(req3, all_links_bw, rack);
 	c.propose(req3, all_links_bw, rack);
 	gg.propose(req3, all_links_bw, rack);
 	f.req_num++;
+
+	for (i = 1; i <= 15; i++)
+		cout << c.rack[i] << " ";
+	cout << endl;
 
 	test(req3, f, c, gg, s);
 	for (i = 1; i <= 3; i++)
@@ -244,8 +257,9 @@ int main()
 			printf("%10.3f ", test_record[i][j]);
 		printf("\n");
 	}
+	winner = 2;
 	//cout << "********"<<f.wcs_FTM << endl;
-	f.wcs_record += f.wcs_FTM;
+	f.wcs_record += f.wcs_CBM;
 	//srm operation
 	if (winner == 1)
 		s.his_sum = s.evaluate(f.implement);
