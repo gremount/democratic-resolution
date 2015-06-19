@@ -123,6 +123,8 @@ int main()
 	GBM gg;
 	SRM s;
 	
+	printf("      WCS        CB        GB        FTE\n");
+	cout << "the first request:" << endl;
 	//req1 propose()
 	f.propose(req1, all_links_bw2, rack2);
 	c.propose(req1, all_links_bw2, rack2);
@@ -134,64 +136,72 @@ int main()
 	for(i=1;i<=3;i++)
 	{
 		for(j=1;j<=4;j++)
-			printf("%f ",test_record[i][j]);
+			printf("%10.3f ",test_record[i][j]);
 		printf("\n");
 	}
-	f.wcs_record += f.wcs_FTM;
-	
+
+	//voting methods
+	int winner;//the winner choosed by the voting methods
+	winner = 1;
+
+	//data update
+	f.wcs_record += test_record[1][1];
+	if (winner == 1)
+		s.his_sum = s.evaluate(f.implement);
+	else if (winner == 2)
+		s.his_sum = s.evaluate(c.implement);
+	else if (winner == 3)
+		s.his_sum = s.evaluate(gg.gbm_implement);
+	else
+		cout << "error" << endl;
+	if (winner == 1 || winner == 2 || winner == 3)
+	{
+		for (i = 1; i<16; i++)
+		{
+			s.FTE_his[i] += s.flow_count[i];
+		}
+	}
+
+	cout << "the second request:" << endl;
 	//req2 propose()
 	f.propose(req2, f.all_links_bw, f.rack);
 	c.propose(req2, f.all_links_bw, f.rack);
 	gg.propose(req2, f.all_links_bw, f.rack);
 	f.req_num++;
+	cout << "implement: " << endl;
+	for (i = 1; i <= 15; i++)
+		cout << i << " " ;
+	cout << endl;
+	for (i = 1; i <= 15; i++)
+		cout << gg.gbm_implement[i]<<" ";
+	cout << endl;
 
 	//req2 evaluate()
 	test(req2,f,c,gg,s);
 	for(i=1;i<=3;i++)
 	{
 		for(j=1;j<=4;j++)
-			printf("%f ",test_record[i][j]);
+			printf("%10.3f ",test_record[i][j]);
 		printf("\n");
 	}
 	f.wcs_record += f.wcs_FTM;
-
+	//srm operation
+	if (winner == 1)
+		s.his_sum = s.evaluate(f.implement);
+	else if (winner == 2)
+		s.his_sum = s.evaluate(c.implement);
+	else if (winner == 3)
+		s.his_sum = s.evaluate(gg.gbm_implement);
+	else
+		cout << "error" << endl;
+	if (winner == 1 || winner == 2 || winner == 3)
+	{
+		for (i = 1; i<16; i++)
+		{
+			s.FTE_his[i] += s.flow_count[i];
+		}
+	}
 	
-	//c.propose(req1, all_links_bw2, rack2);
-	//gg.propose(req1, all_links_bw2, rack2);
-	
-	/*  FTM test
-	//req1
-	f.propose(req1, all_links_bw2, rack2);
-	float co,fo,so;
-	float ggo;
-	f.req_num++;
-	co=c.evaluate(req1, f.all_links_bw, f.rack, f.implement);
-	fo = f.evaluate(req1, f.all_links_bw, f.rack, f.implement);
-	ggo = gg.evaluate(f.all_links_bw);
-	so = s.evaluate(f.implement);
-	printf("cbm result: %f and ftm result: %f \n and gbm: %f  and srm: %f\n", co, fo,ggo,so);
-	f.wcs_record += f.wcs;
-	
-	//second request
-	f.propose(req2, f.all_links_bw, f.rack);
-	f.req_num++;
-	co=c.evaluate(req2, f.all_links_bw, f.rack, f.implement);
-	fo = f.evaluate(req2, f.all_links_bw, f.rack, f.implement);
-	ggo = gg.evaluate(f.all_links_bw);
-	so = s.evaluate(f.implement);
-	printf("cbm result: %f and ftm result: %f \n and gbm: %f  and srm: %f\n", co, fo,ggo,so);
-	f.wcs_record += f.wcs;
-
-	//third request
-	f.propose(req3, f.all_links_bw, f.rack);
-	f.req_num++;
-	co=c.evaluate(req3, f.all_links_bw, f.rack, f.implement);
-	fo = f.evaluate(req3, f.all_links_bw, f.rack, f.implement);
-	ggo = gg.evaluate(f.all_links_bw);
-	so = s.evaluate(f.implement);
-	printf("cbm result: %f and ftm result: %f \n and gbm: %f  and srm: %f\n", co, fo,ggo,so);
-	f.wcs_record += f.wcs;
-	the end of FTM test*/
 
 	int tmp[3][4] = { { 1, 3, 2, 3 }, { 2, 2, 1, 1 }, { 3, 1, 3, 2 } };
 	Table tt(tmp);
@@ -200,32 +210,6 @@ int main()
 	finalWinner = vv.Voting(tt, 3);  // scenario 3
 	cout <<"final winner is "<<finalWinner << endl;
 
-	/*
-	f.propose(req2, c.all_links_bw, c.rack);
-	c.propose(req2, c.all_links_bw, c.rack);
-	f.req_num++;
-	cc = c.evaluate(req2, f.all_links_bw, f.rack, f.implement);
-	ff = f.evaluate(req2, f.all_links_bw, f.rack, f.implement);
-	printf("cbm result: %f and ftm result: %f\n",cc,ff);
-	*/
-
-	/*
-	f.propose(req2,all_links_bw2,rack2);
-	f.evaluate(req2, f.all_links_bw, f.rack, f.implement);
-	f.wcs_record += f.wcs;
-	f.propose(req3, f.all_links_bw, f.rack);
-	f.evaluate(req3, f.link_bw, f.rack, f.implement);
-	*/
-
-	//for (i = 8; i <= 15; i++)
-		//printf("rack[%d]: %d\n", i, f.rack[i]);
-	//printf("wcs: %f\n",f.evaluate(req2,f.all_links_bw,f.rack,f.implement));
-
-	/*
-	for (i = 26; i <= 30; i++)
-	printf("the utli_bw of link %d is %d \n", i,f.ng.mline_all[i]);
-	printf("%d,%d,%f\n", f.bw_core_links, f.bw_all_links,f.wcs);
-	*/
 
 	getchar();
 	return 0;
