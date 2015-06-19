@@ -45,27 +45,27 @@ CGraph::CGraph(list<CEdge*> listEdge){
 	}
 }
 
-float test_record[4][5];
+float test_record[3][4];
 
 void test(pair<int, int> req,FTM& f,CBM& c,GBM& gg, SRM& s)
 {
 	//the initialization of the test_record[][]
 	memset(test_record,0,sizeof(test_record));
 	//evaluate the FTM
-	test_record[1][1] = f.evaluate(req, f.all_links_bw, f.rack, f.implement,1);
-	test_record[1][2] = c.evaluate(req, f.all_links_bw, f.rack, f.implement);
-	test_record[1][3] = gg.evaluate(f.all_links_bw);
-	test_record[1][4] = s.evaluate(f.implement);
+	test_record[0][0] = f.evaluate(req, f.all_links_bw, f.rack, f.implement,1);
+	test_record[0][1] = c.evaluate(req, f.all_links_bw, f.rack, f.implement);
+	test_record[0][2] = gg.evaluate(f.all_links_bw);
+	test_record[0][3] = s.evaluate(f.implement);
 	//evaluate the CBM
-	test_record[2][1] = f.evaluate(req, c.all_links_bw, c.rack, c.implement,2);
-	test_record[2][2] = c.evaluate(req, c.all_links_bw, c.rack, c.implement);
-	test_record[2][3] = gg.evaluate(c.all_links_bw);
-	test_record[2][4] = s.evaluate(c.implement);
+	test_record[1][0] = f.evaluate(req, c.all_links_bw, c.rack, c.implement,2);
+	test_record[1][1] = c.evaluate(req, c.all_links_bw, c.rack, c.implement);
+	test_record[1][2] = gg.evaluate(c.all_links_bw);
+	test_record[1][3] = s.evaluate(c.implement);
 	//evaluate the GBM
-	test_record[3][1] = f.evaluate(req, gg.gbm_all_link_bw, gg.gbm_rack, gg.gbm_implement,3);
-	test_record[3][2] = c.evaluate(req, gg.gbm_all_link_bw, gg.gbm_rack, gg.gbm_implement);
-	test_record[3][3] = gg.evaluate(gg.gbm_all_link_bw);
-	test_record[3][4] = s.evaluate(gg.gbm_implement);
+	test_record[2][0] = f.evaluate(req, gg.gbm_all_link_bw, gg.gbm_rack, gg.gbm_implement,3);
+	test_record[2][1] = c.evaluate(req, gg.gbm_all_link_bw, gg.gbm_rack, gg.gbm_implement);
+	test_record[2][2] = gg.evaluate(gg.gbm_all_link_bw);
+	test_record[2][3] = s.evaluate(gg.gbm_implement);
 }
 
 int main()
@@ -126,7 +126,9 @@ int main()
 	CBM c;
 	GBM gg;
 	SRM s;
-	/*****************  Test for GBM  *****************/
+	Vote vv;
+
+	/*****************  Standard Test   *****************/
 
 	printf("      WCS        CB        GB        FTE\n");
 	
@@ -147,16 +149,18 @@ int main()
 
 	//req1 evaluate()
 	test(req1,f,c,gg,s);
-	for(i=1;i<=3;i++)
+	for(i=0;i<=2;i++)
 	{
-		for(j=1;j<=4;j++)
+		for(j=0;j<=3;j++)
 			printf("%10.3f ",test_record[i][j]);
 		printf("\n");
 	}
 
 	//voting methods
 	int winner;//the winner choosed by the voting methods
-	winner = 3;
+	Table tt1(test_record);
+	winner = vv.Voting(tt1, 2);
+	cout << "the winner is: " << winner << endl;
 
 	//data update
 	//cout << "********" << f.wcs_FTM << endl;
@@ -177,33 +181,52 @@ int main()
 		}
 	}
 	/*****************the second request*****************/
+	cout << endl;
 	cout << "the second request:" << endl;
 	//req2 propose()
-	for (i = 1; i <= 15; i++)
-	{
-		rack[i] = gg.gbm_rack[i];
-		all_links_bw[i] = gg.gbm_all_link_bw[i];
-	}
-	/*
-	cout << endl;
+	if (winner == 1)
+		for (i = 1; i <= 15; i++)
+		{
+			rack[i] = f.rack[i];
+			all_links_bw[i] = f.all_links_bw[i];
+		}
+	else if (winner==2)
+		for (i = 1; i <= 15; i++)
+		{
+			rack[i] = c.rack[i];
+			all_links_bw[i] = c.all_links_bw[i];
+		}
+	else
+		for (i = 1; i <= 15; i++)
+		{
+			rack[i] = gg.gbm_rack[i];
+			all_links_bw[i] = gg.gbm_all_link_bw[i];
+		}
+	
 	for (i = 1; i <= 15; i++)
 		cout << rack[i] << " ";
 	cout << endl;
-	*/
+	
 	f.propose(req2, all_links_bw, rack);
 	c.propose(req2, all_links_bw, rack);
 	gg.propose(req2, all_links_bw, rack);
 	f.req_num++;
-	
+
 	//req2 evaluate()
 	test(req2,f,c,gg,s);
-	for(i=1;i<=3;i++)
+	for(i=0;i<=2;i++)
 	{
-		for(j=1;j<=4;j++)
+		for(j=0;j<=3;j++)
 			printf("%10.3f ",test_record[i][j]);
 		printf("\n");
 	}
-	winner = 3;
+	
+	//voting methods
+	Table tt2(test_record);
+	winner = vv.Voting(tt2, 2);
+	cout << "the winner is: " << winner << endl;
+
+	//data update
 	//cout << "********"<<f.wcs_FTM << endl;
 	f.wcs_record += f.wcs_GBM;
 	//srm operation
@@ -224,35 +247,47 @@ int main()
 	}
 
 	/*****************the third request*****************/
+	cout << endl;
 	cout << "the third request:" << endl;
 	//req3 propose()
-	for (i = 1; i <= 15; i++)
-	{
-		rack[i] = gg.gbm_rack[i];
-		all_links_bw[i] = gg.gbm_all_link_bw[i];
-	}
-	
-	for (i = 1; i <= 15; i++)
-		cout << rack[i] << " ";
-	cout << endl;
+	if (winner == 1)
+		for (i = 1; i <= 15; i++)
+		{
+			rack[i] = f.rack[i];
+			all_links_bw[i] = f.all_links_bw[i];
+		}
+	else if (winner == 2)
+		for (i = 1; i <= 15; i++)
+		{
+			rack[i] = c.rack[i];
+			all_links_bw[i] = c.all_links_bw[i];
+		}
+	else
+		for (i = 1; i <= 15; i++)
+		{
+			rack[i] = gg.gbm_rack[i];
+			all_links_bw[i] = gg.gbm_all_link_bw[i];
+		}
 	
 	f.propose(req3, all_links_bw, rack);
 	c.propose(req3, all_links_bw, rack);
 	gg.propose(req3, all_links_bw, rack);
 	f.req_num++;
-
-	for (i = 1; i <= 15; i++)
-		cout << c.rack[i] << " ";
-	cout << endl;
-
+	
 	test(req3, f, c, gg, s);
-	for (i = 1; i <= 3; i++)
+	for (i = 0; i <= 2; i++)
 	{
-		for (j = 1; j <= 4; j++)
+		for (j = 0; j <= 3; j++)
 			printf("%10.3f ", test_record[i][j]);
 		printf("\n");
 	}
-	winner = 3;
+
+	//voting methods
+	Table tt3(test_record);
+	winner = vv.Voting(tt3, 2);
+	cout << "the winner is: " << winner << endl;
+
+	//data update
 	//cout << "********"<<f.wcs_FTM << endl;
 	f.wcs_record += f.wcs_GBM;
 	//srm operation
@@ -271,14 +306,6 @@ int main()
 			s.FTE_his[i] += s.flow_count[i];
 		}
 	}
-
-	int tmp[3][4] = { { 1, 3, 2, 3 }, { 2, 2, 1, 1 }, { 3, 1, 3, 2 } };
-	Table tt(tmp);
-	int finalWinner;
-	Vote vv;
-	finalWinner = vv.Voting(tt, 3);  // scenario 3
-	cout <<"final winner is "<<finalWinner << endl;
-
 
 	getchar();
 	return 0;

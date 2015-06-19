@@ -43,6 +43,7 @@ public:
 		int i, j;
 		subnet_one = 64 - rack[2];
 		subnet_two = 64 - rack[3];
+		//cout << "net1: "<< subnet_one << "  net2: " << subnet_two << endl;
 		if (subnet_one >= numVMs){
 			for (i = 8; i <= 11; i++)
 			{
