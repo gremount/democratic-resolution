@@ -72,12 +72,12 @@ int main()
 {
 	list<CEdge*> listEdge;
 	int i, j;
-	int all_links_bw2[N+10];
-	int rack2[N+10];
-	for (i=0;i<=N;i++)
+	int all_links_bw2[N + 10];
+	int rack2[N + 10];
+	for (i = 0; i <= N; i++)
 	{
-		all_links_bw2[i]=0;
-		rack2[i]=0;
+		all_links_bw2[i] = 0;
+		rack2[i] = 0;
 	}
 	/*Our experiments emulate a network with a single-rooted, three-level tree topology:
 	*specifically, a 1-2-4 tree with 8 top-of-rack (ToR) switches.
@@ -114,7 +114,7 @@ int main()
 	//g.matrix();
 	//g.p4();
 	//for (i = 26; i <= 153; i++)
-		//g.DijkstraAlg(g, i);
+	//g.DijkstraAlg(g, i);
 	int rack[20] = { 0 };
 	int all_links_bw[20] = { 0 };
 
@@ -131,7 +131,7 @@ int main()
 	/*****************  Standard Test   *****************/
 
 	printf("      WCS        CB        GB        FTE\n");
-	
+
 	/*****************the first request*****************/
 	cout << "the first request:" << endl;
 	//req1 propose()
@@ -143,16 +143,16 @@ int main()
 	/*
 	cout << endl;
 	for (i = 1; i <= 15; i++)
-		cout << rack[i] << " ";
+	cout << rack[i] << " ";
 	cout << endl;
 	*/
 
 	//req1 evaluate()
-	test(req1,f,c,gg,s);
-	for(i=0;i<=2;i++)
+	test(req1, f, c, gg, s);
+	for (i = 0; i <= 2; i++)
 	{
-		for(j=0;j<=3;j++)
-			printf("%10.3f ",test_record[i][j]);
+		for (j = 0; j <= 3; j++)
+			printf("%10.3f ", test_record[i][j]);
 		printf("\n");
 	}
 
@@ -163,14 +163,21 @@ int main()
 	cout << "the winner is: " << winner << endl;
 
 	//data update
-	//cout << "********" << f.wcs_FTM << endl;
-	f.wcs_record += f.wcs_GBM;
 	if (winner == 1)
+	{
 		s.his_sum = s.evaluate(f.implement);
+		f.wcs_record += f.wcs_FTM;
+	}
 	else if (winner == 2)
-		s.his_sum = s.evaluate(c.implement);
+	{
+		s.his_sum = s.evaluate(c.implement); 
+		f.wcs_record += f.wcs_CBM;
+	}
 	else if (winner == 3)
+	{
 		s.his_sum = s.evaluate(gg.gbm_implement);
+		f.wcs_record += f.wcs_GBM;
+	}
 	else
 		cout << "error" << endl;
 	if (winner == 1 || winner == 2 || winner == 3)
@@ -227,15 +234,21 @@ int main()
 	cout << "the winner is: " << winner << endl;
 
 	//data update
-	//cout << "********"<<f.wcs_FTM << endl;
-	f.wcs_record += f.wcs_GBM;
-	//srm operation
 	if (winner == 1)
+	{
 		s.his_sum = s.evaluate(f.implement);
+		f.wcs_record += f.wcs_FTM;
+	}
 	else if (winner == 2)
+	{
 		s.his_sum = s.evaluate(c.implement);
+		f.wcs_record += f.wcs_CBM;
+	}
 	else if (winner == 3)
+	{
 		s.his_sum = s.evaluate(gg.gbm_implement);
+		f.wcs_record += f.wcs_GBM;
+	}
 	else
 		cout << "error" << endl;
 	if (winner == 1 || winner == 2 || winner == 3)
@@ -288,15 +301,21 @@ int main()
 	cout << "the winner is: " << winner << endl;
 
 	//data update
-	//cout << "********"<<f.wcs_FTM << endl;
-	f.wcs_record += f.wcs_GBM;
-	//srm operation
 	if (winner == 1)
+	{
 		s.his_sum = s.evaluate(f.implement);
+		f.wcs_record += f.wcs_FTM;
+	}
 	else if (winner == 2)
+	{
 		s.his_sum = s.evaluate(c.implement);
+		f.wcs_record += f.wcs_CBM;
+	}
 	else if (winner == 3)
+	{
 		s.his_sum = s.evaluate(gg.gbm_implement);
+		f.wcs_record += f.wcs_GBM;
+	}
 	else
 		cout << "error" << endl;
 	if (winner == 1 || winner == 2 || winner == 3)
