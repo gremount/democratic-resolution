@@ -87,6 +87,7 @@ public:
 			}
 			count++;
 		}
+		implement[1] = implement[2] + implement[3];
 		for (i = 2; i <= N; i++)
 		{
 			all_links_bw[i] += link_bw[i];
@@ -100,18 +101,21 @@ public:
 	{
 		int numone=8;//record the rack number with the biggest capacity
 		int i,j;
-		wcs_FTM=0;wcs_CBM=0;wcs_GBM=0;
+		if(k==1)wcs_FTM=0;
+		if(k==2)wcs_CBM=0;
+		if(k==3)wcs_GBM=0;
 		for(i=8;i<=15;i++)
 		{
 			if(implement2[i]<implement2[i+1]) numone=i+1;
 		}
-		if(k==1) {  wcs_FTM = (float)(req.first-implement2[numone])/(float)(req.first);
+		if(k==1) {  
+					wcs_FTM = (float)(req.first-implement2[numone])/(float)(req.first);
+					//cout << "wcs_FTM:  " << wcs_FTM << endl;
 					return  (wcs_record + wcs_FTM) / (float)(req_num);}
 		else if(k==2) {wcs_CBM = (float)(req.first-implement2[numone])/(float)(req.first);
 					   return  (wcs_record + wcs_CBM) / (float)(req_num);}
 		else {wcs_GBM = (float)(req.first-implement2[numone])/(float)(req.first);	
 			  return  (wcs_record + wcs_GBM) / (float)(req_num);}
-		
 		
 	}
 };

@@ -1,8 +1,9 @@
 #pragma once
-#include "FTM_small_map.h"
+//#include "FTM_small_map.h"
 #include "CBM_small_map.h"
 #include "GBM_small_map.h"
 #include "SRM_small_map.h"
+#include "FTM_small_map.h"
 #include "Voting.h"
 
 CEdge::CEdge(int a, int b, int c, int d){
@@ -46,7 +47,7 @@ CGraph::CGraph(list<CEdge*> listEdge){
 
 float test_record[4][5];
 
-void test(pair<int, int> req,FTM f,CBM c,GBM gg, SRM s)
+void test(pair<int, int> req,FTM& f,CBM& c,GBM& gg, SRM& s)
 {
 	//the initialization of the test_record[][]
 	memset(test_record,0,sizeof(test_record));
@@ -114,23 +115,33 @@ int main()
 	//g.p4();
 	//for (i = 26; i <= 153; i++)
 		//g.DijkstraAlg(g, i);
+	int rack[20] = { 0 };
+	int all_links_bw[20] = { 0 };
+
 	pair<int, int> req1(33, 100);
 	pair<int, int> req2(16, 100);
 	pair<int, int> req3(17, 100);
-	
+
 	FTM f;
 	CBM c;
 	GBM gg;
 	SRM s;
-	
+
 	printf("      WCS        CB        GB        FTE\n");
+	
+	/*****************the first request*****************/
 	cout << "the first request:" << endl;
 	//req1 propose()
 	f.propose(req1, all_links_bw2, rack2);
 	c.propose(req1, all_links_bw2, rack2);
 	gg.propose(req1, all_links_bw2, rack2);
 	f.req_num++;
-
+	//for (i = 1; i <= 15; i++)
+	//	cout << f.implement[i] << " ";
+	//cout << endl;
+	//f.rack[1] = 33;
+	//f.rack[2] = 17;
+	//f.rack[3] = 16;
 	//req1 evaluate()
 	test(req1,f,c,gg,s);
 	for(i=1;i<=3;i++)
@@ -145,7 +156,8 @@ int main()
 	winner = 1;
 
 	//data update
-	f.wcs_record += test_record[1][1];
+	//cout << "********" << f.wcs_FTM << endl;
+	f.wcs_record += f.wcs_FTM;
 	if (winner == 1)
 		s.his_sum = s.evaluate(f.implement);
 	else if (winner == 2)
@@ -161,21 +173,28 @@ int main()
 			s.FTE_his[i] += s.flow_count[i];
 		}
 	}
-
+	/*****************the second request*****************/
 	cout << "the second request:" << endl;
 	//req2 propose()
-	f.propose(req2, f.all_links_bw, f.rack);
-	c.propose(req2, f.all_links_bw, f.rack);
-	gg.propose(req2, f.all_links_bw, f.rack);
+	for (i = 1; i <= 15; i++)
+	{
+		rack[i] = f.rack[i];
+		all_links_bw[i] = f.all_links_bw[i];
+	}
+
+
+	f.propose(req2, all_links_bw, rack);
+	c.propose(req2, all_links_bw, rack);
+	gg.propose(req2, all_links_bw, rack);
 	f.req_num++;
-	cout << "implement: " << endl;
+	/*cout << "implement: " << endl;
 	for (i = 1; i <= 15; i++)
 		cout << i << " " ;
 	cout << endl;
 	for (i = 1; i <= 15; i++)
 		cout << gg.gbm_implement[i]<<" ";
 	cout << endl;
-
+	*/
 	//req2 evaluate()
 	test(req2,f,c,gg,s);
 	for(i=1;i<=3;i++)
@@ -184,6 +203,7 @@ int main()
 			printf("%10.3f ",test_record[i][j]);
 		printf("\n");
 	}
+	//cout << "********"<<f.wcs_FTM << endl;
 	f.wcs_record += f.wcs_FTM;
 	//srm operation
 	if (winner == 1)
@@ -201,7 +221,47 @@ int main()
 			s.FTE_his[i] += s.flow_count[i];
 		}
 	}
-	
+
+	/*****************the third request*****************/
+	cout << "the third request:" << endl;
+	//req3 propose()
+	for (i = 1; i <= 15; i++)
+	{
+		rack[i] = f.rack[i];
+		all_links_bw[i] = f.all_links_bw[i];
+	}
+
+
+	f.propose(req3, all_links_bw, rack);
+	c.propose(req3, all_links_bw, rack);
+	gg.propose(req3, all_links_bw, rack);
+	f.req_num++;
+
+	test(req3, f, c, gg, s);
+	for (i = 1; i <= 3; i++)
+	{
+		for (j = 1; j <= 4; j++)
+			printf("%10.3f ", test_record[i][j]);
+		printf("\n");
+	}
+	//cout << "********"<<f.wcs_FTM << endl;
+	f.wcs_record += f.wcs_FTM;
+	//srm operation
+	if (winner == 1)
+		s.his_sum = s.evaluate(f.implement);
+	else if (winner == 2)
+		s.his_sum = s.evaluate(c.implement);
+	else if (winner == 3)
+		s.his_sum = s.evaluate(gg.gbm_implement);
+	else
+		cout << "error" << endl;
+	if (winner == 1 || winner == 2 || winner == 3)
+	{
+		for (i = 1; i<16; i++)
+		{
+			s.FTE_his[i] += s.flow_count[i];
+		}
+	}
 
 	int tmp[3][4] = { { 1, 3, 2, 3 }, { 2, 2, 1, 1 }, { 3, 1, 3, 2 } };
 	Table tt(tmp);

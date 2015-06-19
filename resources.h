@@ -17,7 +17,7 @@ public:
 	bool operator<(CEdge& x){
 		if(weight<x.weight)
 			return 1;
-		else 
+		else
 			return 0;
 	}
 };
@@ -33,12 +33,12 @@ public:
 	int d[N+10][N+10];
 	int p[N+10][N+10];
 	int NumOpenSlots;
-	
+
 	//matrix  邻接矩阵
 	int adjmatrix[N+10][N+10];
 	//p4  给定一个顶点，求一个list，该list中存储了与该顶点关联的所有边
-	map<int,list<CEdge*>> nelist;
-	
+	map<int,list<CEdge*> > nelist;
+
 	CGraph(){;}
 	CGraph(char* inputFile);
 	CGraph(list<CEdge*> listEdge);
@@ -58,7 +58,7 @@ public:
 
 	void p4(){
 		list<CEdge*>::iterator it,iend;
-		
+
 		iend=IncidentList.end();
 		for(it=IncidentList.begin();it!=iend;it++){
 			nelist[(*it)->getTail()].push_back(*it);
@@ -66,7 +66,7 @@ public:
 		list<CEdge*>::iterator it2,iend2;
 		iend2=nelist[3].end();
 	}
-	
+
 	void Update(int s,int i){
 		list<CEdge*>::iterator it,iend;
 		it=nelist[i].begin();
