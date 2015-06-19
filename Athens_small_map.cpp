@@ -126,6 +126,7 @@ int main()
 	CBM c;
 	GBM gg;
 	SRM s;
+	/*****************  Test for GBM  *****************/
 
 	printf("      WCS        CB        GB        FTE\n");
 	
@@ -144,12 +145,6 @@ int main()
 	cout << endl;
 	*/
 
-	//for (i = 1; i <= 15; i++)
-	//	cout << f.implement[i] << " ";
-	//cout << endl;
-	//f.rack[1] = 33;
-	//f.rack[2] = 17;
-	//f.rack[3] = 16;
 	//req1 evaluate()
 	test(req1,f,c,gg,s);
 	for(i=1;i<=3;i++)
@@ -161,11 +156,11 @@ int main()
 
 	//voting methods
 	int winner;//the winner choosed by the voting methods
-	winner = 2;
+	winner = 3;
 
 	//data update
 	//cout << "********" << f.wcs_FTM << endl;
-	f.wcs_record += f.wcs_CBM;
+	f.wcs_record += f.wcs_GBM;
 	if (winner == 1)
 		s.his_sum = s.evaluate(f.implement);
 	else if (winner == 2)
@@ -186,8 +181,8 @@ int main()
 	//req2 propose()
 	for (i = 1; i <= 15; i++)
 	{
-		rack[i] = c.rack[i];
-		all_links_bw[i] = c.all_links_bw[i];
+		rack[i] = gg.gbm_rack[i];
+		all_links_bw[i] = gg.gbm_all_link_bw[i];
 	}
 	/*
 	cout << endl;
@@ -208,9 +203,9 @@ int main()
 			printf("%10.3f ",test_record[i][j]);
 		printf("\n");
 	}
-	winner = 2;
+	winner = 3;
 	//cout << "********"<<f.wcs_FTM << endl;
-	f.wcs_record += f.wcs_CBM;
+	f.wcs_record += f.wcs_GBM;
 	//srm operation
 	if (winner == 1)
 		s.his_sum = s.evaluate(f.implement);
@@ -233,8 +228,8 @@ int main()
 	//req3 propose()
 	for (i = 1; i <= 15; i++)
 	{
-		rack[i] = c.rack[i];
-		all_links_bw[i] = c.all_links_bw[i];
+		rack[i] = gg.gbm_rack[i];
+		all_links_bw[i] = gg.gbm_all_link_bw[i];
 	}
 	
 	for (i = 1; i <= 15; i++)
@@ -257,9 +252,9 @@ int main()
 			printf("%10.3f ", test_record[i][j]);
 		printf("\n");
 	}
-	winner = 2;
+	winner = 3;
 	//cout << "********"<<f.wcs_FTM << endl;
-	f.wcs_record += f.wcs_CBM;
+	f.wcs_record += f.wcs_GBM;
 	//srm operation
 	if (winner == 1)
 		s.his_sum = s.evaluate(f.implement);
