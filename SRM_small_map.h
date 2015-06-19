@@ -4,49 +4,68 @@
 class SRM{
     public:
 	int n;
-    SRM(){n=8;}
+    int FTE_his[16];
+    int flow_count[16];
+    int his_sum;
+    int FTE_limit[16];
+    SRM(){
+		n=16;
+		for(int i=0;i<=15;i++)
+		{
+			FTE_his[i]=0;
+			FTE_limit[i]=9999;
+		}
+		his_sum=0;
+	}
 
-   
-    int evaluate(int implement[])
+    float evaluate(int implement[])
     {
-        int flow_count[15];
-        for(int i = 0;i<8;i++)
+
+        for(int i = 8;i<16;i++)
         {
-            flow_count[i+7] = implement[i+8]*(implement[i+8
-			] -1);
+            flow_count[i] = implement[i]*(implement[i] -1);
         }
-        for(int i = 0;i<7;i++)
+        for(int i = 0;i<8;i++)
         {
             flow_count[i] = 0;
         }
 
-        for(int i = 0;i<n;i++)
+        for(int i = 8;i<n;i++)
         {
             for(int j = i+1;j<n;j++)
             {
-                int num = implement[i+8] * implement[j+8];
+                int num = implement[i] * implement[j]*2;
                 int fi,fj;
-                fi = (i+6)/2;
-                fj = (j+6)/2;
+                fi = (i)/2;
+                fj = (j)/2;
                 while(fi != fj)
                 {
                     flow_count[fi] += num;
                     flow_count[fj] += num;
-                    fi = (fi-1) /2;
-                    fj = (fj - 1) / 2;
+                    fi = fi /2;
+                    fj = fj / 2;
                 }
                 flow_count[fj] += num;
             }
         }
-        int flow_sum =0;
-        for(int i = 0;i < 15;i++)
+
+
+
+        for(int i = 1;i < n;i++)
         {
-            flow_sum += flow_count[i];
-            //cout<<flow_count[i]<<endl;
+            if(FTE_his[i]+flow_count[i]>FTE_limit[i])
+                return 99999999;
+        }
+        int sum = 0;
+
+        for(int i = 1; i< n;i++)
+        {
+            sum += flow_count[i];
         }
 
+        return sum+his_sum;
 
-        return flow_sum;
+
     }
 
 

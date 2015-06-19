@@ -3,7 +3,9 @@
 
 class FTM{
 public:
-	float wcs;//record the wcs at this step
+	float wcs_FTM;//record the wcs by using FTM at this step
+	float wcs_CBM;//record the wcs by using FTM at this step
+	float wcs_GBM;//record the wcs by using FTM at this step
 	float wcs_record;//record the sum of wcs
 
 	int req_num;//record the num of req
@@ -15,9 +17,15 @@ public:
 	int all_links_bw[N+10];//the sum of link_bw in all steps
 	FTM()
 	{ 
-		for(int i=1;i<=N;i++){all_links_bw[i]=0;rack[i]=0;}
 		wcs_record = 0;
 		req_num = 0;
+		wcs_FTM=0;
+		wcs_CBM=0;
+		wcs_GBM=0;
+		memset(implement,0,sizeof(implement));
+		memset(link_bw,0,sizeof(link_bw));
+		memset(all_links_bw,0,sizeof(all_links_bw));
+		memset(rack,0,sizeof(rack));
 	}
 
 	void propose(pair<int, int> req, int all_links_bw2[], int rack2[])
@@ -87,15 +95,23 @@ public:
 		
 		
 	}
-	float evaluate(pair<int,int> req, int all_links_bw2[], int rack2[],int implement2[])
+	float evaluate(pair<int,int> req, int all_links_bw2[], int rack2[],int implement2[],int k)
+	//if FTM: k=1;if CBM: k=2; if GBM: k=3;
 	{
 		int numone=8;//record the rack number with the biggest capacity
 		int i,j;
+		wcs_FTM=0;wcs_CBM=0;wcs_GBM=0;
 		for(i=8;i<=15;i++)
 		{
 			if(implement2[i]<implement2[i+1]) numone=i+1;
 		}
-		wcs = (float)(req.first-implement2[numone])/(float)req.first;
-		return  (wcs_record + wcs) / (float)(req_num);
+		if(k==1) {  wcs_FTM = (float)(req.first-implement2[numone])/(float)(req.first);
+					return  (wcs_record + wcs_FTM) / (float)(req_num);}
+		else if(k==2) {wcs_CBM = (float)(req.first-implement2[numone])/(float)(req.first);
+					   return  (wcs_record + wcs_CBM) / (float)(req_num);}
+		else {wcs_GBM = (float)(req.first-implement2[numone])/(float)(req.first);	
+			  return  (wcs_record + wcs_GBM) / (float)(req_num);}
+		
+		
 	}
 };

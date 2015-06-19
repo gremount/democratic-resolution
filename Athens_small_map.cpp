@@ -44,6 +44,29 @@ CGraph::CGraph(list<CEdge*> listEdge){
 	}
 }
 
+float test_record[4][5];
+
+void test(pair<int, int> req,FTM f,CBM c,GBM gg, SRM s)
+{
+	//the initialization of the test_record[][]
+	memset(test_record,0,sizeof(test_record));
+	//evaluate the FTM
+	test_record[1][1] = f.evaluate(req, f.all_links_bw, f.rack, f.implement,1);
+	test_record[1][2] = c.evaluate(req, f.all_links_bw, f.rack, f.implement);
+	test_record[1][3] = gg.evaluate(f.all_links_bw);
+	test_record[1][4] = s.evaluate(f.implement);
+	//evaluate the CBM
+	test_record[2][1] = f.evaluate(req, c.all_links_bw, c.rack, c.implement,2);
+	test_record[2][2] = c.evaluate(req, c.all_links_bw, c.rack, c.implement);
+	test_record[2][3] = gg.evaluate(c.all_links_bw);
+	test_record[2][4] = s.evaluate(c.implement);
+	//evaluate the GBM
+	test_record[3][1] = f.evaluate(req, gg.gbm_all_link_bw, gg.gbm_rack, gg.gbm_implement,3);
+	test_record[3][2] = c.evaluate(req, gg.gbm_all_link_bw, gg.gbm_rack, gg.gbm_implement);
+	test_record[3][3] = gg.evaluate(gg.gbm_all_link_bw);
+	test_record[3][4] = s.evaluate(gg.gbm_implement);
+}
+
 int main()
 {
 	list<CEdge*> listEdge;
@@ -100,37 +123,37 @@ int main()
 	GBM gg;
 	SRM s;
 	
-	//req1 
+	//req1 propose()
+	f.propose(req1, all_links_bw2, rack2);
 	c.propose(req1, all_links_bw2, rack2);
-	float co,fo,so;
-	float ggo;
+	gg.propose(req1, all_links_bw2, rack2);
 	f.req_num++;
-	co=c.evaluate(req1, c.all_links_bw, c.rack, c.implement);
-	fo = f.evaluate(req1, c.all_links_bw, c.rack, c.implement);
-	ggo = gg.evaluate(c.all_links_bw);
-	so = s.evaluate(c.implement);
-	printf("cbm result: %f and ftm result: %f \n and gbm: %f  and srm: %f\n", co, fo,ggo,so);
-	f.wcs_record += f.wcs;
-	
-	//second request
-	c.propose(req2, c.all_links_bw, c.rack);
-	f.req_num++;
-	co=c.evaluate(req2, c.all_links_bw, c.rack, c.implement);
-	fo = f.evaluate(req2, c.all_links_bw, c.rack, c.implement);
-	ggo = gg.evaluate(c.all_links_bw);
-	so = s.evaluate(c.implement);
-	printf("cbm result: %f and ftm result: %f \n and gbm: %f  and srm: %f\n", co, fo,ggo,so);
-	f.wcs_record += f.wcs;
 
-	//third request
-	c.propose(req3, c.all_links_bw, c.rack);
+	//req1 evaluate()
+	test(req1,f,c,gg,s);
+	for(i=1;i<=3;i++)
+	{
+		for(j=1;j<=4;j++)
+			printf("%f ",test_record[i][j]);
+		printf("\n");
+	}
+	f.wcs_record += f.wcs_FTM;
+	
+	//req2 propose()
+	f.propose(req2, f.all_links_bw, f.rack);
+	c.propose(req2, f.all_links_bw, f.rack);
+	gg.propose(req2, f.all_links_bw, f.rack);
 	f.req_num++;
-	co=c.evaluate(req3, c.all_links_bw, c.rack, c.implement);
-	fo = f.evaluate(req3, c.all_links_bw, c.rack, c.implement);
-	ggo = gg.evaluate(c.all_links_bw);
-	so = s.evaluate(c.implement);
-	printf("cbm result: %f and ftm result: %f \n and gbm: %f  and srm: %f\n", co, fo,ggo,so);
-	f.wcs_record += f.wcs;
+
+	//req2 evaluate()
+	test(req2,f,c,gg,s);
+	for(i=1;i<=3;i++)
+	{
+		for(j=1;j<=4;j++)
+			printf("%f ",test_record[i][j]);
+		printf("\n");
+	}
+	f.wcs_record += f.wcs_FTM;
 
 	
 	//c.propose(req1, all_links_bw2, rack2);

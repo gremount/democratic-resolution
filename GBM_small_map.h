@@ -114,7 +114,7 @@ class GBM{
         }
         if(room >= req_num)
         {
-            cout<<x<<" "<<y<<endl;
+            //cout<<x<<" "<<y<<endl;
             imp(req_num,x,y);
 
 
@@ -136,7 +136,7 @@ class GBM{
 
 
         }
-
+		/*
         cout<<"link_bw"<<endl;
         for(int i = 1;i <= joint_num;i++)
         {
@@ -168,6 +168,7 @@ class GBM{
             cout<<gbm_rack[i]<<"  ";
         }
         cout<<endl;
+		*/
     }
     float evaluate(int all_link_bw[])
     {
