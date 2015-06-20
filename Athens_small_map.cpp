@@ -5,6 +5,7 @@
 #include "SRM_small_map.h"
 #include "FTM_small_map.h"
 #include "Voting.h"
+#include "fstream"
 
 CEdge::CEdge(int a, int b, int c, int d){
 	tail = a;
@@ -72,13 +73,7 @@ int main()
 {
 	list<CEdge*> listEdge;
 	int i, j;
-	int all_links_bw2[N + 10];
-	int rack2[N + 10];
-	for (i = 0; i <= N; i++)
-	{
-		all_links_bw2[i] = 0;
-		rack2[i] = 0;
-	}
+
 	/*Our experiments emulate a network with a single-rooted, three-level tree topology:
 	*specifically, a 1-2-4 tree with 8 top-of-rack (ToR) switches.
 	*/
@@ -110,17 +105,10 @@ int main()
 		flag++;
 	}
 
-	//CGraph g(listEdge);
-	//g.matrix();
-	//g.p4();
-	//for (i = 26; i <= 153; i++)
-	//g.DijkstraAlg(g, i);
 	int rack[20] = { 0 };
 	int all_links_bw[20] = { 0 };
 
-	pair<int, int> req1(33, 100);
-	pair<int, int> req2(16, 100);
-	pair<int, int> req3(17, 100);
+	pair<int, int> req;
 
 	FTM f;
 	CBM c;
@@ -128,199 +116,84 @@ int main()
 	SRM s;
 	Vote vv;
 
+	ifstream testfile("d://github/democratic-resolution/test2.txt");
+
 	/*****************  Standard Test   *****************/
 
 	printf("      WCS        CB        GB        FTE\n");
 
 	/*****************the first request*****************/
-	cout << "the first request:" << endl;
-	//req1 propose()
-	f.propose(req1, all_links_bw2, rack2);
-	c.propose(req1, all_links_bw2, rack2);
-	gg.propose(req1, all_links_bw2, rack2);
-	f.req_num++;
+	int req_num;
+	testfile >> req_num;
+	for (int k = 0; k < req_num; k++)
+	{
+		cout << "-------------------------------------------------" << endl;
+		cout << "req" << k + 1 << ":" << endl;
+		testfile >> req.first;
+		testfile >> req.second;
+		cout << "VMs = " << req.first << " BW = " << req.second << endl;
+		f.propose(req, all_links_bw, rack);
+		c.propose(req, all_links_bw, rack);
+		gg.propose(req, all_links_bw, rack);
+		f.req_num++;
 
-	/*
-	cout << endl;
-	for (i = 1; i <= 15; i++)
-	cout << rack[i] << " ";
-	cout << endl;
-	*/
+		test(req, f, c, gg, s);
+		for (i = 0; i <= 2; i++)
+		{
+			for (j = 0; j <= 3; j++)
+				printf("%10.3f ", test_record[i][j]);
+			printf("\n");
+		}
+		//voting methods
+		int winner;//the winner choosed by the voting methods
+		winner = vv.Voting(test_record, 2);
+		cout << "the winner is: " << winner << endl;
+		
+		//data update
+		if (winner == 1)
+		{
+			s.his_sum = s.evaluate(f.implement);
+			f.wcs_record += f.wcs_FTM;
+		}
+		else if (winner == 2)
+		{
+			s.his_sum = s.evaluate(c.implement);
+			f.wcs_record += f.wcs_CBM;
+		}
+		else if (winner == 3)
+		{
+			s.his_sum = s.evaluate(gg.gbm_implement);
+			f.wcs_record += f.wcs_GBM;
+		}
+		else
+			cout << "error" << endl;
+		if (winner == 1 || winner == 2 || winner == 3)
+		{
+			for (i = 1; i<16; i++)
+			{
+				s.FTE_his[i] += s.flow_count[i];
+			}
+		}
 
-	//req1 evaluate()
-	test(req1, f, c, gg, s);
-	for (i = 0; i <= 2; i++)
-	{
-		for (j = 0; j <= 3; j++)
-			printf("%10.3f ", test_record[i][j]);
-		printf("\n");
-	}
+		if (winner == 1)
+			for (i = 1; i <= 15; i++)
+			{
+				rack[i] = f.rack[i];
+				all_links_bw[i] = f.all_links_bw[i];
+			}
+		else if (winner == 2)
+			for (i = 1; i <= 15; i++)
+			{
+				rack[i] = c.rack[i];
+				all_links_bw[i] = c.all_links_bw[i];
+			}
+		else if (winner == 3)
+			for (i = 1; i <= 15; i++)
+			{
+				rack[i] = gg.gbm_rack[i];
+				all_links_bw[i] = gg.gbm_all_link_bw[i];
+			}
 
-	//voting methods
-	int winner;//the winner choosed by the voting methods
-	winner = vv.Voting(test_record, 2);
-	cout << "the winner is: " << winner << endl;
-
-	//data update
-	if (winner == 1)
-	{
-		s.his_sum = s.evaluate(f.implement);
-		f.wcs_record += f.wcs_FTM;
-	}
-	else if (winner == 2)
-	{
-		s.his_sum = s.evaluate(c.implement); 
-		f.wcs_record += f.wcs_CBM;
-	}
-	else if (winner == 3)
-	{
-		s.his_sum = s.evaluate(gg.gbm_implement);
-		f.wcs_record += f.wcs_GBM;
-	}
-	else
-		cout << "error" << endl;
-	if (winner == 1 || winner == 2 || winner == 3)
-	{
-		for (i = 1; i<16; i++)
-		{
-			s.FTE_his[i] += s.flow_count[i];
-		}
-	}
-	/*****************the second request*****************/
-	cout << endl;
-	cout << "the second request:" << endl;
-	//req2 propose()
-	if (winner == 1)
-		for (i = 1; i <= 15; i++)
-		{
-			rack[i] = f.rack[i];
-			all_links_bw[i] = f.all_links_bw[i];
-		}
-	else if (winner==2)
-		for (i = 1; i <= 15; i++)
-		{
-			rack[i] = c.rack[i];
-			all_links_bw[i] = c.all_links_bw[i];
-		}
-	else
-		for (i = 1; i <= 15; i++)
-		{
-			rack[i] = gg.gbm_rack[i];
-			all_links_bw[i] = gg.gbm_all_link_bw[i];
-		}
-	
-	for (i = 1; i <= 15; i++)
-		cout << rack[i] << " ";
-	cout << endl;
-	
-	f.propose(req2, all_links_bw, rack);
-	c.propose(req2, all_links_bw, rack);
-	gg.propose(req2, all_links_bw, rack);
-	f.req_num++;
-
-	//req2 evaluate()
-	test(req2,f,c,gg,s);
-	for(i=0;i<=2;i++)
-	{
-		for(j=0;j<=3;j++)
-			printf("%10.3f ",test_record[i][j]);
-		printf("\n");
-	}
-	
-	//voting methods
-	winner = vv.Voting(test_record, 2);
-	cout << "the winner is: " << winner << endl;
-
-	//data update
-	if (winner == 1)
-	{
-		s.his_sum = s.evaluate(f.implement);
-		f.wcs_record += f.wcs_FTM;
-	}
-	else if (winner == 2)
-	{
-		s.his_sum = s.evaluate(c.implement);
-		f.wcs_record += f.wcs_CBM;
-	}
-	else if (winner == 3)
-	{
-		s.his_sum = s.evaluate(gg.gbm_implement);
-		f.wcs_record += f.wcs_GBM;
-	}
-	else
-		cout << "error" << endl;
-	if (winner == 1 || winner == 2 || winner == 3)
-	{
-		for (i = 1; i<16; i++)
-		{
-			s.FTE_his[i] += s.flow_count[i];
-		}
-	}
-
-	/*****************the third request*****************/
-	cout << endl;
-	cout << "the third request:" << endl;
-	//req3 propose()
-	if (winner == 1)
-		for (i = 1; i <= 15; i++)
-		{
-			rack[i] = f.rack[i];
-			all_links_bw[i] = f.all_links_bw[i];
-		}
-	else if (winner == 2)
-		for (i = 1; i <= 15; i++)
-		{
-			rack[i] = c.rack[i];
-			all_links_bw[i] = c.all_links_bw[i];
-		}
-	else
-		for (i = 1; i <= 15; i++)
-		{
-			rack[i] = gg.gbm_rack[i];
-			all_links_bw[i] = gg.gbm_all_link_bw[i];
-		}
-	
-	f.propose(req3, all_links_bw, rack);
-	c.propose(req3, all_links_bw, rack);
-	gg.propose(req3, all_links_bw, rack);
-	f.req_num++;
-	
-	test(req3, f, c, gg, s);
-	for (i = 0; i <= 2; i++)
-	{
-		for (j = 0; j <= 3; j++)
-			printf("%10.3f ", test_record[i][j]);
-		printf("\n");
-	}
-
-	//voting methods
-	winner = vv.Voting(test_record, 2);
-	cout << "the winner is: " << winner << endl;
-
-	//data update
-	if (winner == 1)
-	{
-		s.his_sum = s.evaluate(f.implement);
-		f.wcs_record += f.wcs_FTM;
-	}
-	else if (winner == 2)
-	{
-		s.his_sum = s.evaluate(c.implement);
-		f.wcs_record += f.wcs_CBM;
-	}
-	else if (winner == 3)
-	{
-		s.his_sum = s.evaluate(gg.gbm_implement);
-		f.wcs_record += f.wcs_GBM;
-	}
-	else
-		cout << "error" << endl;
-	if (winner == 1 || winner == 2 || winner == 3)
-	{
-		for (i = 1; i<16; i++)
-		{
-			s.FTE_his[i] += s.flow_count[i];
-		}
 	}
 
 	getchar();
