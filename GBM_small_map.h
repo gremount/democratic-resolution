@@ -101,16 +101,14 @@ class GBM{
 
             for(int j = beginnum;j > endnum;j--)
             {
-
-                if(block_num[j] >= req_num && block_num[j] > room)
+                if(block_num[j] >= req_num )
                 {
                     room = block_num[j];
                     x = i;
                     y = j;
+					break;
                 }
             }
-            if(room >= req_num)
-                break;
         }
         if(room >= req_num)
         {

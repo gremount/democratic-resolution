@@ -6,6 +6,8 @@
 #include "FTM_small_map.h"
 #include "Voting.h"
 #include "fstream"
+#include "time.h"
+#include "stdlib.h"
 
 CEdge::CEdge(int a, int b, int c, int d){
 	tail = a;
@@ -73,7 +75,7 @@ int main()
 {
 	list<CEdge*> listEdge;
 	int i, j;
-
+	srand((unsigned)time(NULL));
 	/*Our experiments emulate a network with a single-rooted, three-level tree topology:
 	*specifically, a 1-2-4 tree with 8 top-of-rack (ToR) switches.
 	*/
@@ -116,7 +118,7 @@ int main()
 	SRM s;
 	Vote vv;
 
-	ifstream testfile("d://github/democratic-resolution/test3.txt");
+	ifstream testfile("d://github/democratic-resolution/test2.txt");
 
 	/*****************  Standard Test   *****************/
 
@@ -147,14 +149,17 @@ int main()
 		//voting methods
 		int winner;//the winner choosed by the voting methods
 		winner = vv.Voting(test_record, 2);
-		cout << "After voting, the winner is: " << winner << endl;
+		//cout << "After voting, the winner is: " << winner << endl;
 
+		
 		//global constrain
 		cout << "wcs_CBM " <<test_record[1][0] << " wcs_GBM "<<test_record[2][0]<<endl;
 		if ((winner == 2) && (test_record[1][0] <= 0.5)) winner = 1;
 		else if ((winner == 3) && (test_record[2][0] <= 0.5)) winner = 1;
 		cout << "Due to the constrain, the winner is: " << winner << endl;
 		
+		//winner = (rand() % 3) + 1;
+		//cout << "winner is : "<< winner << endl;
 		//data update
 		if (winner == 1)
 		{
