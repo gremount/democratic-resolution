@@ -116,7 +116,7 @@ int main()
 	SRM s;
 	Vote vv;
 
-	ifstream testfile("d://github/democratic-resolution/test2.txt");
+	ifstream testfile("d://github/democratic-resolution/test3.txt");
 
 	/*****************  Standard Test   *****************/
 
@@ -147,7 +147,13 @@ int main()
 		//voting methods
 		int winner;//the winner choosed by the voting methods
 		winner = vv.Voting(test_record, 2);
-		cout << "the winner is: " << winner << endl;
+		cout << "After voting, the winner is: " << winner << endl;
+
+		//global constrain
+		cout << "wcs_CBM " <<test_record[1][0] << " wcs_GBM "<<test_record[2][0]<<endl;
+		if ((winner == 2) && (test_record[1][0] <= 0.5)) winner = 1;
+		else if ((winner == 3) && (test_record[2][0] <= 0.5)) winner = 1;
+		cout << "Due to the constrain, the winner is: " << winner << endl;
 		
 		//data update
 		if (winner == 1)

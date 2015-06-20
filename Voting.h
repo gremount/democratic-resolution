@@ -16,12 +16,16 @@ public:
 	Vote(){ ; }
 
 	//Scenario 2
-	int Voting(float table[P][M], int k){
+	int Voting(float table2[P][M], int k){
 		//initialization
 		memset(finalVotes, 0, sizeof(finalVotes));
 		memset(TotalVotes, 0, sizeof(TotalVotes));
 		winner = 0;
-
+		float table[3][4];
+		for (int i = 0; i <= 2; i++)
+			for (int j = 0; j <= 3; j++)
+				table[i][j] = table2[i][j];
+		
 		/////convert 0 to 1
 		for (int k = 0; k<P; k++)
 			for (int m = 0; m<M; m++)
@@ -74,10 +78,14 @@ public:
 	}
 
 	//Scenario 3
-	int Voting(int table[P][M], int k){
+	int Voting(int table2[P][M], int k){
 		//initialization
 		winner = 0;
 		memset(wins, 0, sizeof(wins));
+		int table[3][4];
+		for (int i = 0; i <= 2; i++)
+			for (int j = 0; j <= 3; j++)
+				table[i][j] = table2[i][j];
 
 		// count pairwise Votes
 		for (int k = 0; k<P - 1; k++)
