@@ -4,37 +4,9 @@
 #define M 4   // M is the number of modules
 #define None 0;
 
-
-//table[3][4] ,the 4 kinds vuale and 3 proposals
-//4:(wcs,cb(core bandwidth),ab(all bandwidth),ft(flow table entry))
-
-struct Table{
-	vector<vector<float> > table; //in our experiment:table[3][4],3 proposals,4 modules
-
-	Table(){ ; }
-	Table(float tmp[P][M])
-	{
-		table.resize(P*M);
-		for (int i = 0; i<P; i++)
-			for (int j = 0; j<M; j++)
-				table[i].push_back(tmp[i][j]);
-	}
-
-	//scenario 3
-	vector<vector<int> > table2;
-	Table(int tmp[P][M]){
-		table2.resize(P*M);
-		for (int i = 0; i<P; i++)
-			for (int j = 0; j<M; j++)
-				table2[i].push_back(tmp[i][j]);
-	}
-	// void insert(float value);//make_table
-	// need the information:which proposal,which module,in order to insert into the right palce of table
-};
-
 class Vote{
 public:
-	Table tb;
+	//Table tb;
 	float finalVotes[P];//p1,p2,p3
 	float TotalVotes[M];//FTM,CBM,GBM,SRM
 	int flag;//
@@ -43,22 +15,8 @@ public:
 	int winner;
 	Vote(){ ; }
 
-	int Voting(Table t, int k){
-		if (k == 2)
-			return Cumulative_Voting(t);//Scenario 2
-		else if (k == 3)
-			return Condorcet_Voting(t);//Scenario 3
-		else
-		{
-			cout << "the k is the wrong number,make sure k is 2 or 3" << endl;
-			return 0;
-		}
-
-	}
-
 	//Scenario 2
-	int Cumulative_Voting(Table t){
-		tb.table = t.table;
+	int Voting(float table[P][M], int k){
 		//initialization
 		memset(finalVotes, 0, sizeof(finalVotes));
 		memset(TotalVotes, 0, sizeof(TotalVotes));
@@ -68,20 +26,20 @@ public:
 		for (int k = 0; k<P; k++)
 			for (int m = 0; m<M; m++)
 			{
-				if (tb.table[k][m] == 0)
-					tb.table[k][m] = 1;
+				if (table[k][m] == 0)
+					table[k][m] = 1;
 			}
 		///// ½«CB  GB  FTEÈ¡µ¹Êý
 		for (int k = 0; k<P; k++)
 			for (int m = 1; m<M; m++)
-				tb.table[k][m] = 1 / tb.table[k][m];
+				table[k][m] = 1 / table[k][m];
 
 		// count totalVotes
 		int i = 0;
 		while (i<M){
 			for (int j = 0; j<M; j++)
 			{
-				TotalVotes[i] = tb.table[0][j] + tb.table[1][j] + tb.table[2][j];
+				TotalVotes[i] = table[0][j] + table[1][j] + table[2][j];
 				i++;
 			}
 		}
@@ -90,7 +48,7 @@ public:
 		for (int k = 0; k<P; k++)
 			for (int m = 0; m<M; m++)
 			{
-				finalVotes[k] += tb.table[k][m] / TotalVotes[m];
+				finalVotes[k] += table[k][m] / TotalVotes[m];
 			}
 
 		//select winner
@@ -116,8 +74,7 @@ public:
 	}
 
 	//Scenario 3
-	int Condorcet_Voting(Table t){
-		tb.table2 = t.table2;
+	int Voting(int table[P][M], int k){
 		//initialization
 		winner = 0;
 		memset(wins, 0, sizeof(wins));
@@ -126,7 +83,7 @@ public:
 		for (int k = 0; k<P - 1; k++)
 			for (int m = 0; m<M; m++)
 				for (int j = 1; j + k<P; j++)
-					wins[tb.table2[k][m]][tb.table2[k + j][m]] += 1;
+					wins[table[k][m]][table[k + j][m]] += 1;
 
 		// count votes for every proposal
 		memset(finalwin, 0, sizeof(finalwin));

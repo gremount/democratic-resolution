@@ -158,8 +158,7 @@ int main()
 
 	//voting methods
 	int winner;//the winner choosed by the voting methods
-	Table tt1(test_record);
-	winner = vv.Voting(tt1, 2);
+	winner = vv.Voting(test_record, 2);
 	cout << "the winner is: " << winner << endl;
 
 	//data update
@@ -229,8 +228,7 @@ int main()
 	}
 	
 	//voting methods
-	Table tt2(test_record);
-	winner = vv.Voting(tt2, 2);
+	winner = vv.Voting(test_record, 2);
 	cout << "the winner is: " << winner << endl;
 
 	//data update
@@ -296,8 +294,7 @@ int main()
 	}
 
 	//voting methods
-	Table tt3(test_record);
-	winner = vv.Voting(tt3, 2);
+	winner = vv.Voting(test_record, 2);
 	cout << "the winner is: " << winner << endl;
 
 	//data update
